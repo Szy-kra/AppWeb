@@ -1,5 +1,4 @@
-using AppWeb.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using AppWeb.Infrastructure.Extentions;
 
 namespace AppWeb
 {
@@ -12,9 +11,10 @@ namespace AppWeb
             // Dodanie obs³ugi kontrolerów i widoków (MVC)
             builder.Services.AddControllersWithViews();
 
+
             // Rejestracja AppWebDbContext z u¿yciem Connection Stringa z appsettings.json
-            builder.Services.AddDbContext<AppWebDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddInfrastructure(builder.Configuration);
+
 
             var app = builder.Build();
 
