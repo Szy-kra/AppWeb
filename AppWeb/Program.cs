@@ -35,17 +35,4 @@ namespace AppWeb
     }
 }
 
-class Room
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public int QtyPeople { get; set; } // Iloœæ ludzi
-    public List<Equipment> Equipments { get; set; } = new();
 
-    public Room(string name, int qtyPeople)
-    {
-        Name = name;
-        QtyPeople = qtyPeople;
-    }
-]
