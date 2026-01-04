@@ -1,7 +1,10 @@
-﻿using AppWeb.Infrastructure.Persistence;
+﻿using AppWeb.Domain.Interfaces;
+using AppWeb.Infrastructure.Persistence;
+using AppWeb.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace AppWeb.Infrastructure.Extentions
 {
@@ -14,6 +17,12 @@ namespace AppWeb.Infrastructure.Extentions
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+            /* AddScoped rejestruje usługę w kontenerze Dependency Injection z cyklem życia ograniczonym
+            do pojedynczego żądania HTTP (HttpRequest), co gwarantuje współdzielenie 
+            tej samej instancji obiektu przez wszystkie komponenty w obrębie jednego wątku obsługi */
+            services.AddScoped<ICottageRepository, CottageRepositories>();
         }
     }
 }

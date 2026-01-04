@@ -9,14 +9,21 @@ namespace AppWeb.Infrastructure.Persistence
         {
         }
 
+        //właściwości DbSet która REPREZENTUJE tabelę w bazie danych
         public DbSet<Domain.Entities.Cottage> Cottages { get; set; }
 
-        // Metoda OnConfiguring została usunięta, ponieważ połączenie jest teraz zarządzane centralnie w Program.cs
 
+
+
+
+
+        //własciwosc w ramach tabeli ktora jest reprezentacja encji w Cottage
+        //relacja miedzy Cottage a ContactDetails
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Domain.Entities.Cottage>()
-                 .OwnsOne(c => c.ContactDetails);
+             .OwnsOne(c => c.ContactDetails);
         }
+
     }
 }
