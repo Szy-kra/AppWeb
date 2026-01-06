@@ -12,7 +12,7 @@ namespace AppWeb.Infrastructure.Persistence
         //właściwości DbSet która REPREZENTUJE tabelę w bazie danych
         public DbSet<Domain.Entities.Cottage> Cottages { get; set; }
 
-
+        public DbSet<Domain.Entities.CottageImage> CottageImages { get; set; }
 
 
 

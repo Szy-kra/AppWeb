@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppWeb.Infrastructure.Migrations
 {
     [DbContext(typeof(AppWebDbContext))]
-    [Migration("20260103225842_CottageAboutAdded")]
-    partial class CottageAboutAdded
+    [Migration("20260105222728_AddCottageImagesTable")]
+    partial class AddCottageImagesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,28 @@ namespace AppWeb.Infrastructure.Migrations
                     b.ToTable("Cottages");
                 });
 
+            modelBuilder.Entity("AppWeb.Domain.Entities.CottageImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CottageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CottageId");
+
+                    b.ToTable("CottageImages");
+                });
+
             modelBuilder.Entity("AppWeb.Domain.Entities.Cottage", b =>
                 {
                     b.OwnsOne("AppWeb.Domain.Entities.CottageContactDetails", "ContactDetails", b1 =>
@@ -70,11 +92,11 @@ namespace AppWeb.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("Price")
+                            b1.Property<string>("PostalCode")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("PostalCode")
+                            b1.Property<string>("Price")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -92,6 +114,22 @@ namespace AppWeb.Infrastructure.Migrations
 
                     b.Navigation("ContactDetails")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AppWeb.Domain.Entities.CottageImage", b =>
+                {
+                    b.HasOne("AppWeb.Domain.Entities.Cottage", "Cottage")
+                        .WithMany("Images")
+                        .HasForeignKey("CottageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cottage");
+                });
+
+            modelBuilder.Entity("AppWeb.Domain.Entities.Cottage", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

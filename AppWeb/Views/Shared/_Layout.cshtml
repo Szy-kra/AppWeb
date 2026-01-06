@@ -1,46 +1,68 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ProjectName</title>
+    <title>@ViewData["Title"] - CottageBooking</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ProjectName.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-light navbar-yellow shadow-lg mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectName</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                <a class="navbar-brand fw-bold d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/image/tent.png" alt="Tent Icon" width="30" height="30" class="me-2 tent-icon-nav" />
+                    CottageBooking</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" id="navbarMain">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Start</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Cottage" asp-action="Index">Nasze Domki</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Cottage" asp-action="Create">+ Dodaj Ofertę</a>
                         </li>
                     </ul>
+
+                    <form class="d-flex ms-auto mt-2 mt-lg-0" asp-controller="Cottage" asp-action="Index" method="get">
+                        <input class="form-control me-2 border-dark"
+                               type="search"
+                               name="searchString"
+                               placeholder="Nazwa lub miejscowość..."
+                               aria-label="Search"
+                               style="background: rgba(255,255,255,0.5);">
+                        <button class="btn btn-dark fw-bold" type="submit">Szukaj</button>
+                    </form>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ProjectName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="footer text-muted mt-5 py-4" style="background-color: rgba(0,0,0,0.2); border-top: 1px solid #4ea93b;">
+        <div class="container text-center text-light">
+            &copy; 2026 - <span class="text-sun fw-bold">CottageBooking</span> - Domki, campingi, agroturystyka.
+            <a class="ms-3 text-light text-decoration-none" asp-area="" asp-controller="Home" asp-action="Privacy">Prywatność</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

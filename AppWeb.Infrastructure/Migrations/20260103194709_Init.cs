@@ -20,7 +20,7 @@ namespace AppWeb.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ContactDetails_PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactDetails_Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactDetails_Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactDetails_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactDetails_City = table.Column<string>(type: "nvarchar(max)", nullable: false),

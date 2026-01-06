@@ -1,24 +1,31 @@
-﻿using AppWeb.Domain.Interfaces;
+﻿using AppWeb.Domain.Entities;
+using AppWeb.Domain.Interfaces;
 using AppWeb.Infrastructure.Persistence;
-
-
-
+using Microsoft.EntityFrameworkCore;
 
 namespace AppWeb.Infrastructure.Repositories
 {
-    internal class CottageRepositories : ICottageRepository
+    public class CottageRepository : ICottageRepository
     {
         private readonly AppWebDbContext _dbContext;
 
-        public CottageRepositories(AppWebDbContext dbContext)
+        public CottageRepository(AppWebDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task Create(Domain.Entities.Cottage cottage) // Dodaj 'async'
+        public async Task Create(Cottage cottage)
         {
-            _dbContext.Add(cottage); // Dodajemy do kolejki
-            await _dbContext.SaveChangesAsync(); // Wysyłamy do SQL
+            _dbContext.Add(cottage);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        // TO DODAJEMY (Przyprawy do slidera):
+        public async Task<IEnumerable<Cottage>> GetAll()
+        {
+            return await _dbContext.Cottages
+                .Include(c => c.Images) // <--- Klucz do slidera!
+                .ToListAsync();
         }
     }
 }

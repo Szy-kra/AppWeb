@@ -31,8 +31,8 @@ namespace AppWeb.Infrastructure.Seeders
                             City = "Zakopane",
                             Street = "Leśna 5",
                             PostalCode = "34-500",
-                            PhoneNumber = "+48123456789",
-                            Email = "podtulipanem@gmail.com"
+                            Price = "300",
+                            Email = "-"
                         }
                     };
 

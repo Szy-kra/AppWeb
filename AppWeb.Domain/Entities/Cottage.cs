@@ -8,7 +8,7 @@
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public CottageContactDetails ContactDetails { get; set; } = default!;
 
-
+        public List<CottageImage> Images { get; set; } = new List<CottageImage>();
 
         public string? About { get; set; }
 

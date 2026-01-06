@@ -67,7 +67,7 @@ namespace AppWeb.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("PhoneNumber")
+                            b1.Property<string>("Price")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 

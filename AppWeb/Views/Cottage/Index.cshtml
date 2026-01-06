@@ -1,0 +1,47 @@
+﻿@*AppWeb.MVC.Views.Index*@
+
+@model IEnumerable<AppWeb.Domain.Entities.Cottage>
+
+<div class="container">
+    <h1 class="my-4">Dostępne Domki</h1>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow">
+                    <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            @if (item.Images != null && item.Images.Any())
+                            {
+                                for (int i = 0; i < item.Images.Count; i++)
+                                {
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <img src="@item.Images[i].Url" class="d-block w-100" style="height: 300px; object-fit: cover;">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="https://placehold.co/600x400?text=Brak+zdj%C4%99%C4%87" class="d-block w-100" style="height: 300px; object-fit: cover;">
+                                </div>
+                            }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text text-success fw-bold">Cena: @item.ContactDetails.Price zł / doba</p>
+                        <a asp-action="Details" asp-route-encodedName="@item.EncodedName" class="btn btn-primary">Zobacz szczegóły</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
