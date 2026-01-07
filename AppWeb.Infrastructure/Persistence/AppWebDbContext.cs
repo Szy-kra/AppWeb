@@ -2,10 +2,10 @@
 
 namespace AppWeb.Infrastructure.Persistence
 {
-    public class AppWebDbContext : DbContext
+    public class AppWebDbv2Context : DbContext
     {
         // Dodajemy konstruktor przyjmujący opcje, aby Program.cs mógł przekazać parametry z pliku JSON
-        public AppWebDbContext(DbContextOptions<AppWebDbContext> options) : base(options)
+        public AppWebDbv2Context(DbContextOptions<AppWebDbv2Context> options) : base(options)
         {
         }
 

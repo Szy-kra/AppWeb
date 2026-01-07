@@ -1,4 +1,5 @@
-﻿using AppWeb.Application.Services;
+﻿using AppWeb.Application.Mappings;
+using AppWeb.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -11,6 +12,8 @@ namespace AppWeb.Application.Extentions
         public static void AddApplication(this IServiceCollection services)
         {
             services.AddScoped<ICottageServices, CottageServices>();
+
+            services.AddAutoMapper(typeof(CottageMappingProfile));
         }
     }
 

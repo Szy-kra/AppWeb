@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-// Wywo³uje metodê zdefiniowan¹ w AppWeb.Infrastructure/Extensions/ServiceCollectionExtension.cs, która konfiguruje bazê w AppWeb.Infrastructure/Persistence/AppWebDbContext.cs
+// Wywo³uje metodê zdefiniowan¹ w AppWeb.Infrastructure/Extensions/ServiceCollectionExtension.cs, która konfiguruje bazê w AppWeb.Infrastructure/Persistence/AppWebDbv2Context.cs
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Wywo³uje metodê zdefiniowan¹ w AppWeb.Application/Extentions/ServiceCollectionExtensions.cs, która rejestruje serwisy w AppWeb.Application/Services/

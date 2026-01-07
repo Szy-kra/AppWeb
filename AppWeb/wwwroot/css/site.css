@@ -1,111 +1,117 @@
-/* --- Sekcja Navbar (Wypchniêta nad root lub u¿ywaj¹ca zmiennych) --- */
-.navbar-yellow {
-    background-color: #ebc334 !important; /* Ciemny ¿ó³ty / miodowy */
-    border-bottom: 2px solid #b8860b;
-}
-
 /* --- ZMIENNE KOLORYSTYCZNE --- */
 :root {
-    --forest-bg: #141c06; /* brudna zieleñ */
-    --moss-green: #3a4230; /* Ciemniejsza zieleñ do kart/sekcji */
-    --leaf-green: #4ea93b; /* Jasna zieleñ akcentowa */
-    --sun-yellow: #ebc334; /* Ujednolicony miodowy ¿ó³ty (taki jak w navbarze) */
-    --text-soft: #f4f4f4; /* Delikatna biel dla tekstów */
+    --forest-bg: #121a06;
+    --moss-green: #3a4230;
+    --leaf-green: #4ea93b;
+    --sun-yellow: #ebc334;
+    --text-soft: #f4f4f4;
 }
 
-/* --- G£ÓWNE STYLE --- */
+/* --- RESTART I T£O --- */
 body {
-    background-color: #121a06 !important; /* t³o strony */
+    background-color: var(--forest-bg) !important;
     color: var(--text-soft) !important;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    padding: 0;
 }
 
-/* --- TEKSTY I KOLORY --- */
-.text-nature {
+/* --- NAVBAR --- */
+.navbar-yellow {
+    background-color: var(--sun-yellow) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--forest-bg) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+}
+
+/* --- PRZYCISKI (Wspólne dla <button> i <a>) --- */
+
+/* Jasnozielony przycisk (Zamieœæ Og³oszenie / Zapisz) */
+.btn-nature, a.btn-nature {
+    background-color: transparent !important;
     color: var(--leaf-green) !important;
+    border: 2px solid var(--leaf-green) !important;
+    border-radius: 50px !important;
+    padding: 10px 30px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important; /* Kluczowe dla <a> */
+    display: inline-block !important;
+    transition: all 0.3s ease-in-out !important;
+    cursor: pointer;
+    text-align: center;
+}
+
+    .btn-nature:hover, a.btn-nature:hover {
+        background-color: var(--leaf-green) !important;
+        color: var(--forest-bg) !important;
+        box-shadow: 0 0 20px var(--leaf-green) !important;
+        transform: translateY(-2px) !important;
+    }
+
+/* ¯ó³ty przycisk (PrzejdŸ do Oferty / Szczegó³y) */
+.btn-sun, a.btn-sun {
+    background-color: var(--sun-yellow) !important;
+    color: var(--forest-bg) !important;
+    border: 2px solid var(--sun-yellow) !important;
+    border-radius: 50px !important;
+    padding: 10px 30px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: all 0.3s ease-in-out !important;
+    cursor: pointer;
+    text-align: center;
+}
+
+    .btn-sun:hover, a.btn-sun:hover {
+        background-color: transparent !important;
+        color: var(--sun-yellow) !important;
+        box-shadow: 0 0 20px var(--sun-yellow) !important;
+        transform: translateY(-2px) !important;
+    }
+
+/* --- KARTY I TEKSTY --- */
+.nature-card {
+    background-color: var(--moss-green) !important;
+    border-left: 5px solid var(--leaf-green) !important;
+    border-radius: 8px;
+    position: relative;
 }
 
 .text-sun {
     color: var(--sun-yellow) !important;
 }
 
-/* Nadpisanie standardowych klas Bootstrapa */
-.text-primary {
+.text-nature {
     color: var(--leaf-green) !important;
 }
 
-.text-warning {
-    color: var(--sun-yellow) !important;
+/* --- PRZYCISK USUWANIA ZDJÊÆ (CZERWONY KRZY¯YK) --- */
+.action-btn-remove {
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
+    width: 28px !important;
+    height: 28px !important;
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    border: 2px solid white !important;
+    z-index: 999 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
 }
 
-/* --- KOMPONENTY --- */
-
-.discover-poland-box {
-    border-left: 4px solid var(--sun-yellow);
-    background: rgba(212, 160, 23, 0.1); /* Lekki blask miodowy */
-    padding: 20px;
-    margin: 25px 0;
-    border-radius: 0 10px 10px 0;
-}
-
-.nature-card {
-    background-color: var(--moss-green);
-    border-left: 5px solid var(--leaf-green);
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* --- PRZYCISKI (CTA) --- */
-
-.btn-sun {
-    background-color: var(--sun-yellow);
-    color: #1a2409 !important; /* Ciemny tekst (t³o body) dla kontrastu */
-    border: 2px solid var(--sun-yellow);
-    border-radius: 50px;
-    padding: 12px 35px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-}
-
-    .btn-sun:hover {
-        background-color: transparent;
-        color: var(--sun-yellow) !important;
-        box-shadow: 0 5px 20px rgba(212, 160, 23, 0.4);
-        transform: translateY(-3px);
-    }
-
-.btn-nature-outline {
-    background-color: transparent;
-    color: var(--leaf-green) !important;
-    border: 2px solid var(--leaf-green);
-    border-radius: 50px;
-    padding: 12px 35px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-}
-
-    .btn-nature-outline:hover {
-        background-color: var(--leaf-green);
-        color: white !important;
-        box-shadow: 0 5px 15px rgba(78, 169, 59, 0.3);
-        transform: translateY(-3px);
-    }
-
-/* --- GRAFIKA I LOGO --- */
-.logo-forest, .forest-img {
-    border: 8px solid var(--moss-green);
-    background-color: var(--moss-green);
-    filter: brightness(0.9) contrast(1.1);
-    transition: 0.5s;
-}
-
-    .logo-forest:hover {
-        transform: rotate(3deg) scale(1.05);
+    .action-btn-remove:hover {
+        transform: scale(1.2);
     }

@@ -16,7 +16,7 @@ namespace AppWeb.Infrastructure.Extentions
 
 
             // Tutaj musimy użyć AddDbContext, a nie nazwy samej metody rozszerzającej
-            services.AddDbContext<AppWebDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppWebDbv2Context>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
 
 

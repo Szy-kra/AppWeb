@@ -1,54 +1,92 @@
-﻿
-<h1>Dodaj swój Domek do naszej społeczności </h1>
-<hr />
+﻿@model AppWeb.Domain.Entities.Cottage
 
-<div class="row>">
-    <div class="col-md-6">
-        <form action="/Cottage/Create" method="post"></form>
+<h1 class="text-sun">Dodaj swój Domek do naszej społeczności</h1>
+<hr class="border-success" />
 
-        <div class="from-group mb-3">
-             <label for="Name" class="form-label">Nazwa Domku</label>
-             <input type="text" class="form-control" id="Name" name="Name" required />
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    @* Główny kontener dwóch kolumn *@
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch;">
+
+        @* LEWA KOLUMNA (Pola tekstowe) *@
+        <div class="d-flex flex-column justify-content-between">
+            <div class="form-group mb-3">
+                <label for="Name" class="form-label">Nazwa Domku</label>
+                <input type="text" class="form-control" id="Name" name="Name" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="Description" class="form-label">Opis</label>
+                <input type="text" class="form-control" id="Description" name="Description" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="About" class="form-label">Szczegóły</label>
+                <input type="text" class="form-control" id="About" name="About" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label" for="MaxPersons">Maksymalna liczba osób</label>
+                <input class="form-control" type="number" id="MaxPersons" name="MaxPersons" min="1" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label" for="Price">Cena za dobę [zł]</label>
+                <input class="form-control" type="text" id="Price" name="Price" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label" for="Street">Adres</label>
+                <input class="form-control" type="text" id="Street" name="Street" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label" for="City">Miasto</label>
+                <input class="form-control" type="text" id="City" name="City" required />
+            </div>
+
+            <div class="form-group mb-0">
+                <label class="control-label" for="PostalCode">Kod pocztowy</label>
+                <input class="form-control" type="text" id="PostalCode" name="PostalCode" required />
+            </div>
         </div>
 
-        <div class="from-group mb-3">
-            <label for="Description" class="form-label">Opis</label>
-            <input type="text" class="form-control" id="Description" name="Description" required />
+        @* PRAWA KOLUMNA (Siatka zdjęć) *@
+        @* Overflow: visible jest kluczowe, żeby czerwony przycisk X nie został ucięty *@
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px;">
+            @for (int i = 1; i <= 6; i++)
+            {
+                <div class="card bg-dark text-white border-secondary h-100 position-relative"
+                     style="border-style: dashed; border-width: 2px; overflow: visible;">
+
+                    <label for="file-@i" class="card-body d-flex flex-column align-items-center justify-content-center p-0 text-center"
+                           style="cursor: pointer; min-height: 140px;">
+
+                        <div id="content-@i">
+                            <span class="small mb-1 fw-bold d-block">Zdjęcie @i</span>
+                            <div style="opacity: 0.5; font-size: 1.5rem;">➕</div>
+                        </div>
+
+                        <img id="preview-@i" src="#" alt="Podgląd"
+                             style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px;" />
+
+                        <input type="file" name="ImageFiles" id="file-@i" class="form-control d-none"
+                               accept="image/*" onchange="previewImage(this, @i)" />
+                    </label>
+                </div>
+            }
         </div>
-
-        <div class="from-group mb-3">
-            <label for="About" class="form-label">Szczegóły</label>
-            <input type="text" class="form-control" id="About" name="About" required />
-        </div>
-
-     
-
-        <div class="from-group mb-3">
-            <label class="control-label" for="Price">Cena za dobę [zł]</label>
-            <input class="from-control" type="text" id="Price" name="ContactDetails.Price" />              
-        </div>
-
-
-        <div class="from-group mb-3">
-            <label class="control-label" for="Street">Adress</label>
-            <input class="from-control" type="text" id="Street" name="ContactDetails.Street" />
-        </div>
-
-        <div class="from-group mb-3">
-            <label class="control-label" for="City">Miasto</label>
-            <input class="from-control" type="text" id="City" name="ContactDetails.City" />
-        </div>
-
-        <div class="from-group mb-3">
-            <label class="control-label" for="PostalCode">Kod pocztowy</label>
-            <input class="from-control" type="text" id="PostalCode" name="ContactDetails.PostalCode" />
-        </div> 
-        
-        <div class="form-group mb-3">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
- 
     </div>
 
-</div>
+    @* Przycisk Zapisz (Zmieniony na zielony styl nature) *@
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <button type="submit" class="btn-nature w-100 fw-bold shadow-sm py-3" style="font-size: 1.1rem;">
+                Zapisz i opublikuj domek
+            </button>
+        </div>
+    </div>
+</form>
 
+@section Scripts {
+    @* Skrypt usunięty stąd - korzystamy z globalnego site.js *@
+}

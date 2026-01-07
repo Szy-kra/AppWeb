@@ -1,14 +1,14 @@
 ﻿using AppWeb.Domain.Entities; // Powiązanie z modelami danych (Cottage.cs)
-using AppWeb.Infrastructure.Persistence; // Powiązanie z bazą danych (AppWebDbContext.cs)
+using AppWeb.Infrastructure.Persistence; // Powiązanie z bazą danych (AppWebDbv2Context.cs)
 
 namespace AppWeb.Infrastructure.Seeders
 {
     public class CottageSeeder
     {
-        private readonly AppWebDbContext _dbContext;
+        private readonly AppWebDbv2Context _dbContext;
 
-        // Konstruktor wstrzykujący narzędzie do obsługi bazy (zdefiniowane w Persistence/AppWebDbContext.cs)
-        public CottageSeeder(AppWebDbContext dbContext)
+        // Konstruktor wstrzykujący narzędzie do obsługi bazy (zdefiniowane w Persistence/AppWebDbv2Context.cs)
+        public CottageSeeder(AppWebDbv2Context dbContext)
         {
             _dbContext = dbContext;
         }
@@ -26,13 +26,13 @@ namespace AppWeb.Infrastructure.Seeders
                     {
                         Name = "Pod Tulipanem",
                         Description = "Niewielki domek położony w lesie, przy górskim potoku",
-                        ContactDetails = new CottageContactDetails() // Powiązanie z Domain/Entities/CottageContactDetails.cs
+                        ContactDetails = new CottageDetails() // Powiązanie z Domain/Entities/CottageDetails.cs
                         {
                             City = "Zakopane",
-                            Street = "Leśna 5",
+                            Street = "Leśna 8",
                             PostalCode = "34-500",
-                            Price = "300",
-                            Email = "-"
+                            Price = "800",
+                            MaxPersons = 8
                         }
                     };
 

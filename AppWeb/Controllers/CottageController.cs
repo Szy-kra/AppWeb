@@ -1,80 +1,41 @@
-﻿using AppWeb.Application.Services;
+﻿using AppWeb.Application.DataTransferObject;
+using AppWeb.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.MVC.Controllers
 {
     public class CottageController : Controller
     {
-        //private readonly przypisanie konkretnej instacnji z kodu AddScoped
         private readonly ICottageServices _cottageService;
+
         public CottageController(ICottageServices cottageService)
         {
             _cottageService = cottageService;
         }
 
-
-        // definiowanie akcji która bedzie zwracała widok  przez nasz kontroler
+        // Widok formularza - wyświetla stronę dodawania
         public ActionResult Create()
         {
             return View();
         }
 
-
+        // Akcja obsługująca wysłanie formularza
         [HttpPost]
-
-
-
-
-        public async Task<IActionResult> Create(Domain.Entities.Cottage cottages, List<IFormFile> ImageFiles)
+        public async Task<IActionResult> Create(CottageDto cottages, List<IFormFile> ImageFiles)
         {
-
-            // 1. Sprawdzamy, czy użytkownik dodał jakieś zdjęcia
-            if (ImageFiles != null && ImageFiles.Any())
+            // Sprawdzenie, czy dane tekstowe są poprawne (walidacja)
+            if (!ModelState.IsValid)
             {
-                // Ograniczamy do 6 zdjęć na zaliczenie, żeby nie przesadzić
-                foreach (var file in ImageFiles.Take(6))
-                {
-                    // Tworzymy unikalną nazwę pliku, żeby się nie powtarzały
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
-                    // Ścieżka do PANIEGO folderu wwwroot/uploadsImg
-                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploadsImg");
-
-                    // Tworzymy folder, jeśli go jeszcze nie ma
-                    if (!Directory.Exists(uploadPath))
-                    {
-                        Directory.CreateDirectory(uploadPath);
-                    }
-
-                    var fullPath = Path.Combine(uploadPath, fileName);
-
-                    // Kopiujemy plik z przeglądarki na PANIEGO dysk
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    // Dodajemy informację o zdjęciu (link do root) do obiektu domku
-                    // Dzięki temu EF SQL Express zapisze to w tabeli CottageImages
-                    cottages.Images.Add(new Domain.Entities.CottageImage
-                    {
-                        Url = "/uploadsImg/" + fileName
-                    });
-                }
+                return View(cottages);
             }
 
+            // PRZEKAZANIE DO SERWISU
+            // Tutaj wysyłamy model i listę plików do CottageServices.
+            // To tam teraz dzieje się zapis na dysk i dodawanie ścieżek do bazy.
+            await _cottageService.Create(cottages, ImageFiles);
 
-
-
-
-            // 2. Zapisujemy wszystko (domek + linki do zdjęć) jednym wywołaniem serwisu
-            await _cottageService.Create(cottages);
-
-
-
-            // 3. Po sukcesie przekierowujemy np. do widoku Create (lub Index)
+            // Powrót do formularza
             return RedirectToAction(nameof(Create));
         }
-
     }
 }

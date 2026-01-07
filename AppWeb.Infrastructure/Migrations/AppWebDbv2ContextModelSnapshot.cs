@@ -4,19 +4,16 @@ using AppWeb.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace AppWeb.Infrastructure.Migrations
 {
-    [DbContext(typeof(AppWebDbContext))]
-    [Migration("20260105222728_AddCottageImagesTable")]
-    partial class AddCottageImagesTable
+    [DbContext(typeof(AppWebDbv2Context))]
+    partial class AppWebDbv2ContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +40,6 @@ namespace AppWeb.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EncodedName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -79,7 +75,7 @@ namespace AppWeb.Infrastructure.Migrations
 
             modelBuilder.Entity("AppWeb.Domain.Entities.Cottage", b =>
                 {
-                    b.OwnsOne("AppWeb.Domain.Entities.CottageContactDetails", "ContactDetails", b1 =>
+                    b.OwnsOne("AppWeb.Domain.Entities.CottageDetails", "ContactDetails", b1 =>
                         {
                             b1.Property<int>("CottageId")
                                 .HasColumnType("int");
@@ -88,9 +84,8 @@ namespace AppWeb.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("Email")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<int>("MaxPersons")
+                                .HasColumnType("int");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()

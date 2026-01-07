@@ -1,14 +1,19 @@
-﻿@*AppWeb.MVC.Views.Index*@
-
+﻿
 @model IEnumerable<AppWeb.Domain.Entities.Cottage>
 
-<div class="container">
-    <h1 class="my-4">Dostępne Domki</h1>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center my-4">
+        <h1 class="m-0 text-sun">Dostępne Domki</h1>
+        @* Przycisk na górze strony *@
+        <a asp-action="Create" class="btn-nature">➕ Dodaj własny domek</a>
+    </div>
+
     <div class="row">
         @foreach (var item in Model)
         {
             <div class="col-md-6 mb-4">
-                <div class="card h-100 shadow">
+                <div class="card h-100 shadow nature-card border-0">
+                    @* Karuzela zdjęć *@
                     <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @if (item.Images != null && item.Images.Any())
@@ -27,18 +32,26 @@
                                 </div>
                             }
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carousel-@item.Id" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
                     </div>
 
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text text-success fw-bold">Cena: @item.ContactDetails.Price zł / doba</p>
-                        <a asp-action="Details" asp-route-encodedName="@item.EncodedName" class="btn btn-primary">Zobacz szczegóły</a>
+                    @* Treść karty *@
+                    <div class="card-body bg-dark text-white d-flex flex-column">
+                        <h5 class="card-title text-sun">@item.Name</h5>
+
+                        <p class="card-text text-nature fw-bold mb-1">
+                            Cena: @(item.ContactDetails?.Price ?? "0") zł / doba
+                        </p>
+
+                        @if (item.ContactDetails != null)
+                        {
+                            <p class="small mb-3 text-muted">@item.ContactDetails.City, @item.ContactDetails.Street</p>
+                        }
+
+                        @* DWA PRZYCISKI OBOK SIEBIE *@
+                        <div class="mt-auto d-flex gap-2">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn-sun flex-fill text-center" style="padding: 10px 5px !important; font-size: 0.85rem !important;">SZCZEGÓŁY</a>
+                            <a asp-action="Create" class="btn-nature flex-fill text-center" style="padding: 10px 5px !important; font-size: 0.85rem !important;">ZAMIEŚĆ SWÓJ</a>
+                        </div>
                     </div>
                 </div>
             </div>
