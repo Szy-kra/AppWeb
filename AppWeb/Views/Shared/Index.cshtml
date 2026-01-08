@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Strona Główna";
+}
+
+<div class="container-fluid d-flex align-items-center hero-wide" style="min-height: 85vh;">
+    <div class="row w-100 align-items-center">
+
+        @* LEWA STRONA *@
+        <div class="col-lg-7 ps-lg-5">
+            <h1 class="display-3 fw-bold text-nature mb-3">
+                Domki, campingi, agroturystyka.
+            </h1>
+            <h2 class="h3 text-sun mb-4">Zwiedzaj z nami Polskę!</h2>
+
+            <p class="lead mb-4" style="color: var(--text-soft); opacity: 0.9; max-width: 700px;">
+                Witaj na portalu, który łączy miłośników natury z najpiękniejszymi zakątkami kraju.
+                Znajdź swoje wymarzone miejsce na odpoczynek lub podziel się swoim kawałkiem nieba z innymi.
+            </p>
+
+            @* Wykorzystujemy Twoją klasę .nature-card *@
+            <div class="nature-card p-4 mb-5" style="max-width: 600px;">
+                <p class="mb-2" style="color: var(--text-soft); font-size: 1rem; opacity: 0.85;">
+                    Możesz zamieścić swoje ogłoszenie na naszej stronie, a odwiedzający nasz portal miłośnicy odpoczynku na łonie natury na pewno do Ciebie zawitają. Łączymy pasję do gościnności z unikalnymi zakątkami Polski.
+                </p>
+                <p class="text-sun fw-bold small m-0">POMÓŻMY ODKRYWAĆ PIĘKNE ZAKĄTKI POLSKI !!</p>
+            </div>
+
+            <div class="d-flex gap-3">
+                <a href="/Cottage/Index" class="btn-sun">PRZEJDŹ DO OFERTY</a>
+                <a href="/Cottage/Create" class="btn-nature">ZAMIEŚĆ OGŁOSZENIE</a>
+            </div>
+        </div>
+
+        @* PRAWA STRONA *@
+        <div class="col-lg-5 d-flex flex-column align-items-center justify-content-center">
+            <div class="rounded-circle logo-circle">
+                @* SPRAWDŹ ROZSZERZENIE: Jeśli logo1 to JPG, zmień końcówkę poniżej *@
+                <img src="/image/logo1.png" alt="Logo">
+            </div>
+            <p class="mt-4 small" style="color: var(--text-soft); opacity: 0.5; letter-spacing: 2px;">
+                NAJPIĘKNIEJSZE AGROTURYSTYKI W JEDNYM MIEJSCU
+            </p>
+        </div>
+
+    </div>
+</div>
