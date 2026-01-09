@@ -29,14 +29,14 @@
                             <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Start</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Cottage" asp-action="Index">Nasze Domki</a>
+                            <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Cottage" asp-action="IndexList">Nasze Domki</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Cottage" asp-action="Create">+ Dodaj Ofertę</a>
                         </li>
                     </ul>
 
-                    <form class="d-flex mt-2 mt-lg-0" asp-controller="Cottage" asp-action="Index" method="get">
+                    <form class="d-flex mt-2 mt-lg-0" asp-controller="Cottage" asp-action="IndexList" method="get">
                         <input class="form-control me-2 border-dark"
                                type="search"
                                name="searchString"

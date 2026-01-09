@@ -13,39 +13,42 @@ namespace AppWeb.MVC.Controllers
             _cottageService = cottageService;
         }
 
-        // GET: Cottage/Create
-        // Wyświetla pusty formularz
+        // ZMIANA: Nazwa metody musi być identyczna jak nazwa pliku widoku
+        // Jeśli plik to IndexList.cshtml, metoda to IndexList()
+        public async Task<IActionResult> IndexList()
+        {
+            var cottageAll = await _cottageService.GetAllCottage();
+            return View(cottageAll);
+        }
+
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Cottage/Create
-        // Obsługuje wysyłkę danych z formularza
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CottageDto cottageDto, List<IFormFile> ImageFiles) // zmiana tutaj
+        public async Task<IActionResult> Create(CottageDto cottageDto, List<IFormFile>? ImageFiles)
         {
             if (!ModelState.IsValid)
             {
-                return View(cottageDto); // i tutaj
+                return View(cottageDto);
             }
 
             try
             {
-                await _cottageService.Create(cottageDto, ImageFiles); // i tutaj
+                await _cottageService.Create(cottageDto, ImageFiles);
                 TempData["Success"] = "Domek został dodany pomyślnie!";
-                return RedirectToAction(nameof(Create));
+
+                // ZMIANA: Tutaj też kierujemy do IndexList
+                return RedirectToAction(nameof(IndexList));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Błąd: " + ex.Message);
+                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu: " + ex.Message);
                 return View(cottageDto);
             }
         }
-
-
     }
 }

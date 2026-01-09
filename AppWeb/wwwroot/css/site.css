@@ -5,6 +5,8 @@
     --leaf-green: #4ea93b;
     --sun-yellow: #ebc334;
     --text-soft: #f4f4f4;
+    --burgundy: #800000;
+    --dark-text: #000000;
 }
 
 /* --- RESTART I T£O --- */
@@ -13,105 +15,139 @@ body {
     color: var(--text-soft) !important;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
+    overflow-x: hidden; /* Zapobiega poziomemu przesuwaniu */
 }
 
-/* --- NAVBAR --- */
-.navbar-yellow {
+/* --- ELEMENTY MUSZTARDOWE --- */
+.navbar-yellow,
+.cottage-card {
     background-color: var(--sun-yellow) !important;
+}
+
+.navbar-yellow {
     box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-.navbar-brand, .nav-link {
+/* --- KARTA DOMKU (INDEX LIST) --- */
+.cottage-card,
+.equal-height-card {
+    border: 2px solid var(--burgundy) !important;
+    border-radius: 15px;
+    /* 21vh pozwala zmieœciæ 3 karty + nag³ówek strony na jednym ekranie */
+    height: 21vh;
+    min-height: 165px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+    /* Globalny kolor tekstu i wszystkich ikon wewn¹trz ¿ó³tych kart */
+    .cottage-card,
+    .cottage-card *,
+    .equal-height-card * {
+        color: var(--dark-text) !important;
+    }
+
+/* --- SEKCJA OPISU ZE SCROLLEM --- */
+.description-scroll {
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 100%;
+    padding-right: 10px;
+}
+
+    /* Estetyczny scrollbar dla opisu (Bordowy) */
+    .description-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .description-scroll::-webkit-scrollbar-thumb {
+        background: var(--burgundy);
+        border-radius: 10px;
+    }
+
+/* --- ZDJÊCIA --- */
+.cottage-img,
+.cottage-img-fixed,
+.no-img-placeholder {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+/* --- PRZYCISKI --- */
+.btn-nature,
+.btn-sun {
+    border-radius: 50px !important;
+    padding: 8px 25px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease-in-out !important;
+    display: inline-block !important;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.btn-nature {
+    background-color: transparent !important;
+    color: var(--leaf-green) !important;
+    border: 2px solid var(--leaf-green) !important;
+}
+
+    .btn-nature:hover {
+        background-color: var(--leaf-green) !important;
+        color: var(--forest-bg) !important;
+        box-shadow: 0 0 15px var(--leaf-green);
+        transform: translateY(-2px);
+    }
+
+.btn-sun {
+    background-color: var(--sun-yellow) !important;
+    color: var(--forest-bg) !important;
+    border: 2px solid var(--sun-yellow) !important;
+}
+
+    .btn-sun:hover {
+        background-color: transparent !important;
+        color: var(--sun-yellow) !important;
+        box-shadow: 0 0 15px var(--sun-yellow);
+        transform: translateY(-2px);
+    }
+
+/* --- TYPOGRAFIA --- */
+.navbar-brand,
+.nav-link {
     color: var(--forest-bg) !important;
     font-weight: 800 !important;
     text-transform: uppercase;
 }
 
-/* --- PRZYCISKI (Wspólne dla <button> i <a>) --- */
-
-/* Jasnozielony przycisk (Zamieœæ Og³oszenie / Zapisz) */
-.btn-nature, a.btn-nature {
-    background-color: transparent !important;
-    color: var(--leaf-green) !important;
-    border: 2px solid var(--leaf-green) !important;
-    border-radius: 50px !important;
-    padding: 10px 30px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    text-decoration: none !important; /* Kluczowe dla <a> */
-    display: inline-block !important;
-    transition: all 0.3s ease-in-out !important;
-    cursor: pointer;
-    text-align: center;
+.custom-hr {
+    border: 2px solid var(--sun-yellow);
+    width: 80px;
+    opacity: 1;
+    margin: 0 auto 1.5rem auto;
 }
 
-    .btn-nature:hover, a.btn-nature:hover {
-        background-color: var(--leaf-green) !important;
-        color: var(--forest-bg) !important;
-        box-shadow: 0 0 20px var(--leaf-green) !important;
-        transform: translateY(-2px) !important;
-    }
-
-/* ¯ó³ty przycisk (PrzejdŸ do Oferty / Szczegó³y) */
-.btn-sun, a.btn-sun {
-    background-color: var(--sun-yellow) !important;
-    color: var(--forest-bg) !important;
-    border: 2px solid var(--sun-yellow) !important;
-    border-radius: 50px !important;
-    padding: 10px 30px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    transition: all 0.3s ease-in-out !important;
-    cursor: pointer;
-    text-align: center;
+/* --- IKONY --- */
+.fa-2x {
+    font-size: 1.8rem !important; /* Lekkie zmniejszenie, by nie rozpycha³o karty */
 }
 
-    .btn-sun:hover, a.btn-sun:hover {
-        background-color: transparent !important;
-        color: var(--sun-yellow) !important;
-        box-shadow: 0 0 20px var(--sun-yellow) !important;
-        transform: translateY(-2px) !important;
-    }
-
-/* --- KARTY I TEKSTY --- */
-.nature-card {
-    background-color: var(--moss-green) !important;
-    border-left: 5px solid var(--leaf-green) !important;
-    border-radius: 8px;
-    position: relative;
-}
-
-.text-sun {
-    color: var(--sun-yellow) !important;
-}
-
-.text-nature {
-    color: var(--leaf-green) !important;
-}
-
-/* --- PRZYCISK USUWANIA ZDJÊÆ (CZERWONY KRZY¯YK) --- */
+/* --- USUWANIE --- */
 .action-btn-remove {
     position: absolute !important;
-    top: -10px !important;
-    right: -10px !important;
-    width: 28px !important;
-    height: 28px !important;
+    top: -10px;
+    right: -10px;
+    width: 26px;
+    height: 26px;
     background-color: #dc3545 !important;
     color: white !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid white !important;
-    z-index: 999 !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    transition: transform 0.2s ease;
 }
-
-    .action-btn-remove:hover {
-        transform: scale(1.2);
-    }

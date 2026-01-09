@@ -1,12 +1,13 @@
-﻿namespace AppWeb.Domain.Interfaces
-{
+﻿using AppWeb.Domain.Entities;
 
+namespace AppWeb.Domain.Interfaces
+{
     public interface ICottageRepository
     {
-        Task Create(Domain.Entities.Cottage cottage);
-        // DODAJEMY TO:
-        Task<IEnumerable<Domain.Entities.Cottage>> GetAll();
+        // Kontrakt na tworzenie domku
+        Task Create(Cottage cottage);
+
+        // Kontrakt na pobieranie wszystkich domków (nasza nowość!)
+        Task<IEnumerable<Cottage>> GetAllCottage();
     }
-
-
 }

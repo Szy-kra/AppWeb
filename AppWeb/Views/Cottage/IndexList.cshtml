@@ -1,0 +1,83 @@
+﻿@model IEnumerable<AppWeb.Application.DataTransferObject.CottageDto>
+
+@{
+    ViewData["Title"] = "Nasze Domki";
+}
+
+@* Biblioteka ikon *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<div class="container mt-4">
+    <h1 class="display-4 mb-3 text-center fw-bold text-dark">Nasze Domki</h1>
+    <hr class="custom-hr">
+
+    @* Powiadomienie o sukcesie *@
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show fw-bold shadow-sm mb-4" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-12 mb-3">
+                    @* Karta o stałej wysokości *@
+                    <div class="card shadow-lg p-3 cottage-card equal-height-card">
+                        <div class="row g-0 align-items-center h-100">
+
+                            @* 1. LEWA: NAZWA I MIASTO *@
+                            <div class="col-md-2 border-end border-dark h-100 d-flex flex-column justify-content-center">
+                                <h4 class="fw-bold mb-0 text-dark">@item.Name</h4>
+                                <p class="small text-uppercase mb-0 text-dark">@item.City</p>
+                            </div>
+
+                            @* 2. CENA *@
+                            <div class="col-md-2 text-center">
+                                <div class="h5 fw-bold mb-0 text-dark">@item.Price.ToString("N2") zł</div>
+                                <small class="text-uppercase fw-bold text-dark">ZA DOBĘ</small>
+                            </div>
+
+                            @* 3. ŚRODEK: OPIS (Z SCROLLEM) *@
+                            <div class="col-md-4 px-md-4 border-start border-end border-dark h-100 d-flex flex-column">
+                                <h6 class="fw-bold border-bottom border-dark pb-1 d-inline-block text-dark" style="width: fit-content;">Opis:</h6>
+                                <div class="description-scroll">
+                                    <p class="mb-0 full-description text-dark">@item.Description</p>
+                                </div>
+                            </div>
+
+                            @* 4. IKONA I LICZBA OSÓB *@
+                            <div class="col-md-1 text-center d-flex flex-column justify-content-center">
+                                @* Znak ~/ to podstawa w ASP.NET Core - wskazuje na folder wwwroot *@
+                                <img src="~/image/icon.png"
+                                     alt="Osoby"
+                                     style="height: 35px; width: auto; margin: 0 auto 5px auto; object-fit: contain;" />
+
+                                <div class="fw-bold" style="font-size: 1.2rem;">@item.MaxPersons</div>
+                            </div>
+
+                            @* 5. PRAWA: ZDJĘCIE *@
+                            <div class="col-md-3 ps-3 h-100">
+                                @if (item.ImageUrls != null && item.ImageUrls.Any())
+                                {
+                                    <img src="@item.ImageUrls.First()" class="img-fluid rounded cottage-img-fixed" alt="@item.Name">
+                                }
+                                else
+                                {
+                                    <div class="bg-light d-flex align-items-center justify-content-center rounded cottage-img-fixed border">
+                                        <small class="text-muted">Brak zdjęcia</small>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

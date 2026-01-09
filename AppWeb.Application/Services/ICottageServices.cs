@@ -5,10 +5,8 @@ namespace AppWeb.Application.Services
 {
     public interface ICottageServices
     {
-        // Tworzenie domku z obsługą plików - dodano '?' przy liście, bo zdjęcia są opcjonalne
-        Task Create(CottageDto cottage, List<IFormFile>? ImageFiles);
-
-        // Pobieranie listy wszystkich domków do wyświetlenia na Indexie
-        Task<IEnumerable<CottageDto>> GetCottageList();
+        // Tu używamy CottageDto, nie Cottage!
+        Task Create(CottageDto cottageDto, List<IFormFile>? ImageFiles);
+        Task<IEnumerable<CottageDto>> GetAllCottage();
     }
 }
