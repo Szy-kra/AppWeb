@@ -15,7 +15,7 @@ body {
     color: var(--text-soft) !important;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    overflow-x: hidden; /* Zapobiega poziomemu przesuwaniu */
+    overflow-x: hidden;
 }
 
 /* --- ELEMENTY MUSZTARDOWE --- */
@@ -33,7 +33,6 @@ body {
 .equal-height-card {
     border: 2px solid var(--burgundy) !important;
     border-radius: 15px;
-    /* 21vh pozwala zmieœciæ 3 karty + nag³ówek strony na jednym ekranie */
     height: 21vh;
     min-height: 165px;
     overflow: hidden;
@@ -41,7 +40,6 @@ body {
     transition: transform 0.2s ease-in-out;
 }
 
-    /* Globalny kolor tekstu i wszystkich ikon wewn¹trz ¿ó³tych kart */
     .cottage-card,
     .cottage-card *,
     .equal-height-card * {
@@ -56,7 +54,6 @@ body {
     padding-right: 10px;
 }
 
-    /* Estetyczny scrollbar dla opisu (Bordowy) */
     .description-scroll::-webkit-scrollbar {
         width: 6px;
     }
@@ -116,7 +113,11 @@ body {
         transform: translateY(-2px);
     }
 
-/* --- TYPOGRAFIA --- */
+/* --- TYPOGRAFIA I ELEMENTY --- */
+.text-sun {
+    color: var(--sun-yellow) !important;
+}
+
 .navbar-brand,
 .nav-link {
     color: var(--forest-bg) !important;
@@ -131,12 +132,7 @@ body {
     margin: 0 auto 1.5rem auto;
 }
 
-/* --- IKONY --- */
-.fa-2x {
-    font-size: 1.8rem !important; /* Lekkie zmniejszenie, by nie rozpycha³o karty */
-}
-
-/* --- USUWANIE --- */
+/* --- USUWANIE ZDJÊÆ --- */
 .action-btn-remove {
     position: absolute !important;
     top: -10px;
@@ -150,4 +146,23 @@ body {
     align-items: center;
     justify-content: center;
     border: 2px solid white !important;
+    cursor: pointer;
+    z-index: 100;
+}
+
+/* --- STYLE DLA FORMULARZA CREATE (Pola i Karty) --- */
+.form-section-custom {
+    background-color: rgba(58, 66, 48, 0.2);
+    border: 1px solid var(--moss-green);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.image-upload-box {
+    border: 2px dashed var(--sun-yellow) !important;
+    background-color: var(--moss-green) !important;
+    min-height: 130px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 10px;
 }

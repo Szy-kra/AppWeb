@@ -8,34 +8,35 @@ namespace AppWeb.Application.Mappings
     {
         public CottageMappingProfile()
         {
-            // 1. Mapowanie z Formularza (DTO) do Bazy (Domain)
+            // 1. Mapowanie z DTO (Formularz) do Encji (Baza)
             CreateMap<CottageDto, Cottage>()
+                .MaxDepth(1) // Zatrzymuje mapowanie w kółko
                 .ForMember(dest => dest.ContactDetails, opt => opt.MapFrom(src => new CottageDetails
                 {
-                    Description = src.Description, // Krótki opis trafia do detali
-                    Price = src.Price,             // Decimal do Decimal (bez konwersji!)
+                    Description = src.Description,
+                    Price = src.Price,
                     MaxPersons = src.MaxPersons,
                     Street = src.Street,
                     City = src.City,
                     PostalCode = src.PostalCode
                 }))
-                // Mapowanie listy linków na obiekty CottageImage
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src =>
-                    src.ImageUrls.Select(url => new CottageImage { Url = url })))
-                // Tworzenie sluga dla adresu URL
                 .ForMember(dest => dest.EncodedName, opt => opt.MapFrom(src =>
-                    src.Name.ToLower().Replace(" ", "-")));
+                    src.Name != null ? src.Name.ToLower().Replace(" ", "-") : ""));
 
-            // 2. Mapowanie z Bazy (Domain) do Formularza (DTO) - potrzebne np. przy edycji
+            // 2. Mapowanie z Encji (Baza) do DTO (Wyświetlanie na liście)
+            // TO TUTAJ NASTĘPOWAŁ CRASH PRZY POBIERANIU LISTY
             CreateMap<Cottage, CottageDto>()
+                .MaxDepth(1) // Zatrzymuje mapowanie w kółko
                 .ForMember(dto => dto.Description, opt => opt.MapFrom(src => src.ContactDetails.Description))
-                .ForMember(dto => dto.Price, opt => opt.MapFrom(src => src.ContactDetails.Price)) // Decimal do Decimal
+                .ForMember(dto => dto.Price, opt => opt.MapFrom(src => src.ContactDetails.Price))
                 .ForMember(dto => dto.City, opt => opt.MapFrom(src => src.ContactDetails.City))
                 .ForMember(dto => dto.Street, opt => opt.MapFrom(src => src.ContactDetails.Street))
                 .ForMember(dto => dto.PostalCode, opt => opt.MapFrom(src => src.ContactDetails.PostalCode))
                 .ForMember(dto => dto.MaxPersons, opt => opt.MapFrom(src => src.ContactDetails.MaxPersons))
-                // Jeśli chcesz zaciągać zdjęcia z powrotem do DTO:
                 .ForMember(dto => dto.ImageUrls, opt => opt.MapFrom(src => src.Images.Select(img => img.Url).ToList()));
+
+            // 3. Mapowanie dla samych zdjęć (pomocnicze)
+            CreateMap<CottageImage, CottageImageDto>();
         }
     }
 }

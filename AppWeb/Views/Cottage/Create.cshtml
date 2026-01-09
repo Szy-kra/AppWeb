@@ -1,131 +1,128 @@
 ﻿@model AppWeb.Application.DataTransferObject.CottageDto
 
-<style>
-    /* Styl dla przycisku usuwania zdjęcia */
-    .action-btn-remove {
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background: #ff4d4d;
-        color: white;
-        border-radius: 50%;
-        width: 26px;
-        height: 26px;
-        text-align: center;
-        line-height: 24px;
-        cursor: pointer;
-        z-index: 100;
-        font-weight: bold;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        border: 2px solid white;
-    }
-
-        .action-btn-remove:hover {
-            background: #cc0000;
-            transform: scale(1.1);
-        }
-</style>
+@{
+    ViewData["Title"] = "Dodaj Domek";
+}
 
 <h1 class="text-sun">Dodaj swój Domek do naszej społeczności</h1>
 <hr class="border-success" />
 
-<form asp-action="Create" enctype="multipart/form-data" method="post">
-    @* Główny kontener dwóch kolumn *@
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: stretch;">
+<div class="container-fluid p-0">
+    <form asp-action="Create" enctype="multipart/form-data" method="post">
 
-        @* LEWA KOLUMNA (Dane podstawowe i Adres) *@
-        <div class="d-flex flex-column gap-2">
-            <div class="form-group mb-3">
-                <label asp-for="Name" class="form-label">Nazwa Domku</label>
-                <input asp-for="Name" class="form-control" placeholder="np. Słoneczna Polana" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+        @* Wyświetlanie błędów walidacji (np. z DtoValidator) *@
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-            <div class="form-group mb-3">
-                @* Mapujemy do ContactDetails.Description - krótki opis na listę *@
-                <label asp-for="Description" class="form-label">Krótki opis (na listę)</label>
-                <input asp-for="Description" class="form-control" placeholder="Krótka zachęta dla turystów" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+        <div class="row g-4">
+            @* LEWA KOLUMNA: Dane tekstowe i Adres *@
+            <div class="col-md-6 d-flex flex-column gap-3">
 
-            <div class="form-group mb-3">
-                <label asp-for="MaxPersons" class="control-label">Maksymalna liczba osób</label>
-                <input asp-for="MaxPersons" type="number" class="form-control" />
-                <span asp-validation-for="MaxPersons" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label fw-bold">Nazwa Domku</label>
+                    <input asp-for="Name" class="form-control shadow-sm" placeholder="np. Słoneczna Polana" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Price" class="control-label">Cena za dobę [zł]</label>
-                <input asp-for="Price" type="number" step="0.01" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label fw-bold">Krótki opis (na listę)</label>
+                    <input asp-for="Description" class="form-control shadow-sm" placeholder="Krótka zachęta dla turystów" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Street" class="control-label">Ulica / Adres</label>
-                <input asp-for="Street" class="form-control" />
-                <span asp-validation-for="Street" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="City" class="form-label">Miasto</label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-0">
-                <label asp-for="PostalCode" class="form-label">Kod pocztowy</label>
-                <input asp-for="PostalCode" class="form-control" />
-                <span asp-validation-for="PostalCode" class="text-danger"></span>
-            </div>
-        </div>
-
-        @* PRAWA KOLUMNA (Siatka zdjęć + Długi opis) *@
-        <div class="d-flex flex-column" style="height: 100%;">
-            @* Siatka zdjęć *@
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px;">
-                @for (int i = 1; i <= 6; i++)
-                {
-                    <div class="card bg-dark text-white border-secondary h-100 position-relative"
-                         style="border-style: dashed; border-width: 2px; overflow: visible;">
-
-                        <label for="file-@i" class="card-body d-flex flex-column align-items-center justify-content-center p-0 text-center"
-                               style="cursor: pointer; min-height: 140px;">
-
-                            <div id="content-@i">
-                                <span class="small mb-1 fw-bold d-block">Zdjęcie @i</span>
-                                <div style="opacity: 0.5; font-size: 1.5rem;">➕</div>
-                            </div>
-
-                            <img id="preview-@i" src="#" alt="Podgląd"
-                                 style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px;" />
-
-                            <input type="file" name="ImageFiles" id="file-@i" class="form-control d-none"
-                                   accept="image/*" onchange="previewImage(this, @i)" />
-                        </label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="MaxPersons" class="form-label fw-bold">Max osób</label>
+                            <input asp-for="MaxPersons" type="number" class="form-control shadow-sm" />
+                            <span asp-validation-for="MaxPersons" class="text-danger"></span>
+                        </div>
                     </div>
-                }
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Price" class="form-label fw-bold">Cena za dobę [zł]</label>
+                            <input asp-for="Price" type="number" step="0.01" class="form-control shadow-sm" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Street" class="form-label fw-bold">Ulica / Adres</label>
+                    <input asp-for="Street" class="form-control shadow-sm" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label asp-for="City" class="form-label fw-bold">Miasto</label>
+                            <input asp-for="City" class="form-control shadow-sm" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PostalCode" class="form-label fw-bold">Kod pocztowy</label>
+                            <input asp-for="PostalCode" class="form-control shadow-sm" placeholder="00-000" />
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            @* POLE SZCZEGÓŁY (About) *@
-            <div class="form-group d-flex flex-column" style="flex-grow: 1;">
-                <label asp-for="About" class="form-label">Szczegółowy opis domku</label>
-                <textarea asp-for="About" class="form-control"
-                          style="flex-grow: 1; min-height: 120px; resize: none;"
-                          placeholder="Tutaj wpisz wszystko o wyposażeniu, atrakcjach i okolicy..."></textarea>
-                <span asp-validation-for="About" class="text-danger"></span>
+            @* PRAWA KOLUMNA: Siatka zdjęć i Długi opis *@
+            <div class="col-md-6 d-flex flex-column">
+
+                <label class="form-label fw-bold">Zdjęcia obiektu (max 6)</label>
+                <div class="row g-2 mb-3">
+                    @for (int i = 1; i <= 6; i++)
+                    {
+                        <div class="col-4">
+                            <div class="card bg-dark text-white border-secondary h-100 position-relative shadow-sm"
+                                 style="border-style: dashed; border-width: 2px; min-height: 120px;">
+
+                                <label for="file-@i" class="card-body d-flex flex-column align-items-center justify-content-center p-0 text-center"
+                                       style="cursor: pointer;">
+
+                                    <div id="content-@i">
+                                        <span class="small d-block">FOTO @i</span>
+                                        <i class="bi bi-plus-circle opacity-50"></i>
+                                    </div>
+
+                                    <img id="preview-@i" src="#" alt="Podgląd"
+                                         style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px;" />
+
+                                    <input type="file" name="ImageFiles" id="file-@i" class="form-control d-none"
+                                           accept="image/*" onchange="previewImage(this, @i)" />
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="form-group flex-grow-1 d-flex flex-column">
+                    <label asp-for="About" class="form-label fw-bold">Szczegółowy opis domku</label>
+                    <textarea asp-for="About" class="form-control shadow-sm flex-grow-1"
+                              style="min-height: 150px; resize: none;"
+                              placeholder="Opisz wyposażenie, atrakcje i okolicę..."></textarea>
+                    <span asp-validation-for="About" class="text-danger"></span>
+                </div>
             </div>
         </div>
-    </div>
 
-    @* Przycisk Zapisz *@
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <button type="submit" class="btn-nature w-100 fw-bold shadow-sm py-3" style="font-size: 1.1rem;">
-                Zapisz i opublikuj domek
-            </button>
+        @* PRZYCISK ZAPISU *@
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success w-100 fw-bold py-3 shadow">
+                    ZAPISZ I PUBLIKUJ DOMEK
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="IndexList" class="btn btn-outline-secondary w-100 py-3">Anuluj</a>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 
 @section Scripts {
     @{
@@ -144,11 +141,11 @@
                     preview.style.display = 'block';
                     if (content) content.style.display = 'none';
 
-                    // Usuwamy stary przycisk jeśli istniał
+                    // Usuwanie starego przycisku X
                     let oldBtn = container.querySelector('.action-btn-remove');
                     if (oldBtn) oldBtn.remove();
 
-                    // Tworzymy przycisk "X"
+                    // Tworzenie nowego przycisku X
                     const btn = document.createElement('div');
                     btn.innerHTML = '×';
                     btn.className = 'action-btn-remove';

@@ -13,8 +13,6 @@ namespace AppWeb.MVC.Controllers
             _cottageService = cottageService;
         }
 
-        // ZMIANA: Nazwa metody musi być identyczna jak nazwa pliku widoku
-        // Jeśli plik to IndexList.cshtml, metoda to IndexList()
         public async Task<IActionResult> IndexList()
         {
             var cottageAll = await _cottageService.GetAllCottage();
@@ -29,7 +27,7 @@ namespace AppWeb.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CottageDto cottageDto, List<IFormFile>? ImageFiles)
+        public async Task<IActionResult> Create(CottageDto cottageDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,10 +36,10 @@ namespace AppWeb.MVC.Controllers
 
             try
             {
-                await _cottageService.Create(cottageDto, ImageFiles);
-                TempData["Success"] = "Domek został dodany pomyślnie!";
+                // Przekazujemy cottageDto, który zawiera w sobie ImageFiles
+                await _cottageService.Create(cottageDto, cottageDto.ImageFiles);
 
-                // ZMIANA: Tutaj też kierujemy do IndexList
+                TempData["Success"] = "Domek został dodany pomyślnie!";
                 return RedirectToAction(nameof(IndexList));
             }
             catch (Exception ex)
