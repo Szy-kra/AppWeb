@@ -1,9 +1,12 @@
 ﻿using AppWeb.Application.Mappings;
 using AppWeb.Application.Services;
+using AppWeb.Application.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace AppWeb.Application.Extentions
+namespace AppWeb.Application.Extensions
 {
     public static class ServiceCollectionExtension
     {
@@ -14,6 +17,10 @@ namespace AppWeb.Application.Extentions
             services.AddScoped<ICottageServices, CottageServices>();
 
             services.AddAutoMapper(typeof(CottageMappingProfile));
+
+            services.AddValidatorsFromAssemblyContaining<CottageDtoValidator>();
+
+            services.AddFluentValidationAutoValidation();
         }
     }
 

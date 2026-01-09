@@ -1,28 +1,35 @@
-
-using AppWeb.Application.Extentions; // Odwo³anie do metody AddApplication w pliku AppWeb.Application/Extensions/ServiceCollectionExtensions.cs
-using AppWeb.Infrastructure.Extentions;// Odwo³anie do metody AddInfrastructure w pliku AppWeb.Infrastructure/Extensions/ServiceCollectionExtension.cs
-using AppWeb.Infrastructure.Seeders;// Odwo³anie do klasy CottageSeeder w pliku AppWeb.Infrastructure/Seeders/CottageSeeder.cs
+using AppWeb.Application.Extensions;
+using AppWeb.Application.Validators;
+using AppWeb.Infrastructure.Extensions;
+using AppWeb.Infrastructure.Seeders;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Podstawowa konfiguracja MVC
 builder.Services.AddControllersWithViews();
 
-// Wywo³uje metodê zdefiniowan¹ w AppWeb.Infrastructure/Extensions/ServiceCollectionExtension.cs, która konfiguruje bazê w AppWeb.Infrastructure/Persistence/AppWebDbv2Context.cs
-builder.Services.AddInfrastructure(builder.Configuration);
+// 2. Konfiguracja FluentValidation (POPRAWIONA)
+builder.Services.AddFluentValidationAutoValidation(); 
+// PONI¯SZA LINIA JEST KLUCZOWA: bez niej JS nie widzi regu³ z walidatora
+builder.Services.AddFluentValidationClientsideAdapters(); 
+builder.Services.AddValidatorsFromAssemblyContaining<CottageDtoValidator>();
 
-// Wywo³uje metodê zdefiniowan¹ w AppWeb.Application/Extentions/ServiceCollectionExtensions.cs, która rejestruje serwisy w AppWeb.Application/Services/
+// 3. Konfiguracja Warstw (Infrastructure i Application)
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 var app = builder.Build();
 
+// 4. Seeding bazy danych
 using (var scope = app.Services.CreateScope())
 {
-    // Pobiera zarejestrowan¹ w³asn¹ klasê z folderu AppWeb.Infrastructure/Seeders/
     var seeder = scope.ServiceProvider.GetRequiredService<CottageSeeder>();
-    // Wykonuje logikê zapisu do tabeli Cottages zdefiniowanej w AppWeb.Domain/Entities/Cottage.cs
     await seeder.Seed();
 }
 
+// 5. Middleware (Potok przetwarzania)
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -31,7 +38,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -13,29 +13,48 @@ namespace AppWeb.MVC.Controllers
             _cottageService = cottageService;
         }
 
-        // Widok formularza - wyświetla stronę dodawania
-        public ActionResult Create()
+        // GET: Cottage/Create
+        // Wyświetla pusty formularz
+        [HttpGet]
+        public IActionResult Create()
         {
             return View();
         }
 
-        // Akcja obsługująca wysłanie formularza
+        // POST: Cottage/Create
+        // Obsługuje wysyłkę danych z formularza
         [HttpPost]
+        [ValidateAntiForgeryToken] // Zabezpieczenie przed atakami CSRF
         public async Task<IActionResult> Create(CottageDto cottages, List<IFormFile> ImageFiles)
         {
-            // Sprawdzenie, czy dane tekstowe są poprawne (walidacja)
+            // 1. SPRAWDZENIE MODELU
+            // Jeśli walidator (FluentValidation) znajdzie błędy, ModelState.IsValid będzie false.
             if (!ModelState.IsValid)
             {
+                // Zwracamy widok z tym samym modelem 'cottages'.
+                // Dzięki temu błędy pojawią się w Twoich <span> w HTML.
                 return View(cottages);
             }
 
-            // PRZEKAZANIE DO SERWISU
-            // Tutaj wysyłamy model i listę plików do CottageServices.
-            // To tam teraz dzieje się zapis na dysk i dodawanie ścieżek do bazy.
-            await _cottageService.Create(cottages, ImageFiles);
+            // 2. LOGIKA BIZNESOWA
+            // Jeśli dane są poprawne, przesyłamy je do serwisu.
+            try
+            {
+                await _cottageService.Create(cottages, ImageFiles);
 
-            // Powrót do formularza
-            return RedirectToAction(nameof(Create));
+                // Możesz dodać powiadomienie o sukcesie (opcjonalnie)
+                TempData["Success"] = "Domek został dodany pomyślnie!";
+
+                // 3. PRZEKIEROWANIE
+                // Po udanym zapisie czyścimy formularz przekierowując na akcję GET
+                return RedirectToAction(nameof(Create));
+            }
+            catch (Exception ex)
+            {
+                // Jeśli serwis wywali błąd (np. problem z bazą), dodajemy błąd do widoku
+                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu: " + ex.Message);
+                return View(cottages);
+            }
         }
     }
 }

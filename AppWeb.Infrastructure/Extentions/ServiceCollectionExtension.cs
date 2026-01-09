@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace AppWeb.Infrastructure.Extentions
+namespace AppWeb.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtension
     {

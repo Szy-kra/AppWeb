@@ -10,12 +10,14 @@ namespace AppWeb.Application.Mappings
             CreateMap<CottageDto, Domain.Entities.Cottage>()
                 .ForMember(dest => dest.ContactDetails, opt => opt.MapFrom(src => new Domain.Entities.CottageDetails
                 {
-                    Price = src.Price,
+                    // Tutaj dodajemy .ToString(), żeby decimal z DTO wskoczył do stringa w bazie
+                    Price = src.Price.ToString(),
                     MaxPersons = src.MaxPersons,
                     Street = src.Street,
                     City = src.City,
                     PostalCode = src.PostalCode
                 }))
+
                 // To mapowanie zamienia listę tekstów na listę obiektów bazy danych
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src =>
                     src.ImageUrls.Select(url => new Domain.Entities.CottageImage { Url = url })))
