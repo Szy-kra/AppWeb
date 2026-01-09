@@ -39,7 +39,7 @@
                         <h5 class="card-title text-sun">@item.Name</h5>
 
                         <p class="card-text text-nature fw-bold mb-1">
-                            Cena: @(item.ContactDetails?.Price ?? "0") zł / doba
+                            Cena: @(item.ContactDetails?.Price.ToString("0.00") ?? "0.00") zł / doba
                         </p>
 
                         @if (item.ContactDetails != null)

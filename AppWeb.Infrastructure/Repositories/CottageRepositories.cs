@@ -7,9 +7,9 @@ namespace AppWeb.Infrastructure.Repositories
 {
     public class CottageRepository : ICottageRepository
     {
-        private readonly AppWebDbv2Context _dbContext;
+        private readonly AppWebDbContext _dbContext;
 
-        public CottageRepository(AppWebDbv2Context dbContext)
+        public CottageRepository(AppWebDbContext dbContext)
         {
             _dbContext = dbContext;
         }

@@ -23,38 +23,29 @@ namespace AppWeb.MVC.Controllers
 
         // POST: Cottage/Create
         // Obsługuje wysyłkę danych z formularza
+
         [HttpPost]
-        [ValidateAntiForgeryToken] // Zabezpieczenie przed atakami CSRF
-        public async Task<IActionResult> Create(CottageDto cottages, List<IFormFile> ImageFiles)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CottageDto cottageDto, List<IFormFile> ImageFiles) // zmiana tutaj
         {
-            // 1. SPRAWDZENIE MODELU
-            // Jeśli walidator (FluentValidation) znajdzie błędy, ModelState.IsValid będzie false.
             if (!ModelState.IsValid)
             {
-                // Zwracamy widok z tym samym modelem 'cottages'.
-                // Dzięki temu błędy pojawią się w Twoich <span> w HTML.
-                return View(cottages);
+                return View(cottageDto); // i tutaj
             }
 
-            // 2. LOGIKA BIZNESOWA
-            // Jeśli dane są poprawne, przesyłamy je do serwisu.
             try
             {
-                await _cottageService.Create(cottages, ImageFiles);
-
-                // Możesz dodać powiadomienie o sukcesie (opcjonalnie)
+                await _cottageService.Create(cottageDto, ImageFiles); // i tutaj
                 TempData["Success"] = "Domek został dodany pomyślnie!";
-
-                // 3. PRZEKIEROWANIE
-                // Po udanym zapisie czyścimy formularz przekierowując na akcję GET
                 return RedirectToAction(nameof(Create));
             }
             catch (Exception ex)
             {
-                // Jeśli serwis wywali błąd (np. problem z bazą), dodajemy błąd do widoku
-                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu: " + ex.Message);
-                return View(cottages);
+                ModelState.AddModelError("", "Błąd: " + ex.Message);
+                return View(cottageDto);
             }
         }
+
+
     }
 }

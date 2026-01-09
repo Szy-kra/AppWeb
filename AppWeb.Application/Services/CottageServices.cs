@@ -21,30 +21,30 @@ namespace AppWeb.Application.Services
 
         public async Task<IEnumerable<CottageDto>> GetCottageList()
         {
-            // Pobranie encji z bazy (Domain)
             var cottages = await _cottageRepository.GetAll();
-
-            // Mapowanie na DTO (Application)
-            var dtos = _mapper.Map<IEnumerable<CottageDto>>(cottages);
-
-            return dtos;
+            return _mapper.Map<IEnumerable<CottageDto>>(cottages);
         }
 
-        public async Task Create(CottageDto cottageDto, List<IFormFile> ImageFiles)
+        public async Task Create(CottageDto cottageDto, List<IFormFile>? ImageFiles)
         {
-            // 1. Logika zapisu plików na dysk
-            if (ImageFiles != null && ImageFiles.Count > 0)
+            // 1. Zabezpieczenie listy URLi (inicjalizacja, jeśli jest nullem)
+            cottageDto.ImageUrls ??= new List<string>();
+
+            // 2. Logika zapisu plików na dysk (wykona się tylko, jeśli zdjęcia zostały przesłane)
+            if (ImageFiles != null && ImageFiles.Any())
             {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "DataImage");
+
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
                 foreach (var file in ImageFiles)
                 {
                     if (file.Length > 0)
                     {
                         string fileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploadsImg");
-
-                        // Upewnij się, że folder istnieje
-                        if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
-
                         string filePath = Path.Combine(uploadsFolder, fileName);
 
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -52,17 +52,20 @@ namespace AppWeb.Application.Services
                             await file.CopyToAsync(fileStream);
                         }
 
-                        cottageDto.ImageUrls.Add("/uploadsImg/" + fileName);
+                        // Dodajemy ścieżkę do DTO, którą Mapper później zamieni na rekord w bazie
+                        cottageDto.ImageUrls.Add("/DataImage/" + fileName);
                     }
                 }
             }
 
-            // 2. Mapowanie i zapis do bazy danych
+            // 3. Mapowanie DTO na Encję Domain
+            // AutoMapper w profilu (CottageMappingProfile) zajmie się resztą: 
+            // - przekopiuje dane adresowe do ContactDetails
+            // - stworzy obiekty CottageImage z listy ImageUrls
+            // - wygeneruje EncodedName (Slug)
             var cottage = _mapper.Map<AppWeb.Domain.Entities.Cottage>(cottageDto);
 
-            // Metoda tworząca przyjazny URL (jeśli masz ją w encji)
-            cottage.EncodeName();
-
+            // 4. ZAPIS DO BAZY przez Repozytorium
             await _cottageRepository.Create(cottage);
         }
     }

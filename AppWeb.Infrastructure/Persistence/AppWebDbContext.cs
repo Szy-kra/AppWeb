@@ -1,29 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AppWeb.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppWeb.Infrastructure.Persistence
 {
-    public class AppWebDbv2Context : DbContext
+    public class AppWebDbContext : DbContext
     {
-        // Dodajemy konstruktor przyjmujący opcje, aby Program.cs mógł przekazać parametry z pliku JSON
-        public AppWebDbv2Context(DbContextOptions<AppWebDbv2Context> options) : base(options)
+        public AppWebDbContext(DbContextOptions<AppWebDbContext> options) : base(options)
         {
         }
 
-        //właściwości DbSet która REPREZENTUJE tabelę w bazie danych
-        public DbSet<Domain.Entities.Cottage> Cottages { get; set; }
+        public DbSet<Cottage> Cottages { get; set; }
+        public DbSet<CottageImage> CottageImages { get; set; }
 
-        public DbSet<Domain.Entities.CottageImage> CottageImages { get; set; }
-
-
-
-
-        //własciwosc w ramach tabeli ktora jest reprezentacja encji w Cottage
-        //relacja miedzy Cottage a ContactDetails
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Domain.Entities.Cottage>()
-             .OwnsOne(c => c.ContactDetails);
-        }
+            base.OnModelCreating(modelBuilder);
 
+            // Konfiguracja pod nową bazę v3
+            modelBuilder.Entity<Cottage>(eb =>
+            {
+                // Łączymy detale w jedną tabelę
+                eb.OwnsOne(c => c.ContactDetails, details =>
+                {
+                    details.Property(d => d.Price).HasPrecision(18, 2);
+                });
+            });
+        }
     }
 }

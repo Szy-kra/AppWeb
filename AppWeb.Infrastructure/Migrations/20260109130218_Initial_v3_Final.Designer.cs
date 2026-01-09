@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppWeb.Infrastructure.Migrations
 {
-    [DbContext(typeof(AppWebDbv2Context))]
-    [Migration("20260106224927_InitialCreate_V2_Clean")]
-    partial class InitialCreate_V2_Clean
+    [DbContext(typeof(AppWebDbContext))]
+    [Migration("20260109130218_Initial_v3_Final")]
+    partial class Initial_v3_Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,9 +38,6 @@ namespace AppWeb.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EncodedName")
                         .HasColumnType("nvarchar(max)");
@@ -84,22 +81,22 @@ namespace AppWeb.Infrastructure.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("City")
-                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Description")
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<int>("MaxPersons")
                                 .HasColumnType("int");
 
                             b1.Property<string>("PostalCode")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.Property<string>("Price")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
+                            b1.Property<decimal>("Price")
+                                .HasPrecision(18, 2)
+                                .HasColumnType("decimal(18,2)");
 
                             b1.Property<string>("Street")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("CottageId");

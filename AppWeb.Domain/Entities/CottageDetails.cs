@@ -2,12 +2,11 @@
 {
     public class CottageDetails
     {
-        public string Price { get; set; } = default!;
-        public int MaxPersons { get; set; } = default!;
-        public string Street { get; set; } = default!;
-        public string City { get; set; } = default!;
-        public string PostalCode { get; set; } = default!;
-
-
+        public string? Description { get; set; } // Krótki opis do listy
+        public decimal Price { get; set; }        // Cena jako liczba dziesiętna
+        public int MaxPersons { get; set; }
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? PostalCode { get; set; }
     }
 }
