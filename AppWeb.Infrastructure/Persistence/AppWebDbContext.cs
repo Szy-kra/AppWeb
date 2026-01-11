@@ -16,15 +16,23 @@ namespace AppWeb.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Konfiguracja pod nową bazę v3
-            modelBuilder.Entity<Cottage>(eb =>
-            {
-                // Łączymy detale w jedną tabelę
-                eb.OwnsOne(c => c.ContactDetails, details =>
+            // KONFIGURACJA LOKALIZACJI I DETALI (ContactDetails_...)
+            modelBuilder.Entity<Cottage>()
+                .OwnsOne(c => c.ContactDetails, details =>
                 {
-                    details.Property(d => d.Price).HasPrecision(18, 2);
+                    details.Property(d => d.City).HasColumnName("ContactDetails_City");
+                    details.Property(d => d.Street).HasColumnName("ContactDetails_Street");
+                    details.Property(d => d.PostalCode).HasColumnName("ContactDetails_PostalCode");
+                    details.Property(d => d.Description).HasColumnName("ContactDetails_Description");
+                    details.Property(d => d.Price).HasColumnName("ContactDetails_Price").HasPrecision(18, 2);
+                    details.Property(d => d.MaxPersons).HasColumnName("ContactDetails_MaxPersons");
                 });
-            });
+
+            // KONFIGURACJA RELACJI ZDJĘĆ
+            modelBuilder.Entity<CottageImage>()
+                .HasOne(ci => ci.Cottage)
+                .WithMany(c => c.Images)
+                .HasForeignKey(ci => ci.CottageId);
         }
     }
 }

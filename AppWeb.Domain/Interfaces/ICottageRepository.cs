@@ -7,7 +7,10 @@ namespace AppWeb.Domain.Interfaces
         // Kontrakt na tworzenie domku
         Task Create(Cottage cottage);
 
-        // Kontrakt na pobieranie wszystkich domków (nasza nowość!)
+        // Kontrakt na pobieranie wszystkich domków
         Task<IEnumerable<Cottage>> GetAllCottage();
+
+        // POPRAWIONE: Dodano kontrakt na aktualizację (niezbędne do zapisu zdjęć)
+        Task Update(Cottage cottage);
     }
 }

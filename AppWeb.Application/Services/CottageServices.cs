@@ -1,8 +1,7 @@
 ﻿using AppWeb.Application.DataTransferObject;
+using AppWeb.Domain.Entities;
 using AppWeb.Domain.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 
 namespace AppWeb.Application.Services
 {
@@ -10,60 +9,56 @@ namespace AppWeb.Application.Services
     {
         private readonly ICottageRepository _cottageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public CottageServices(ICottageRepository cottageRepository, IMapper mapper, IWebHostEnvironment webHostEnvironment)
+        public CottageServices(ICottageRepository cottageRepository, IMapper mapper)
         {
             _cottageRepository = cottageRepository;
             _mapper = mapper;
-            _webHostEnvironment = webHostEnvironment;
+        }
+
+        public async Task Create(CottageDto cottageDto)
+        {
+            var cottage = _mapper.Map<Cottage>(cottageDto);
+            cottage.EncodeName();
+            await _cottageRepository.Create(cottage);
         }
 
         public async Task<IEnumerable<CottageDto>> GetAllCottage()
         {
-            var allCottagesFromDb = await _cottageRepository.GetAllCottage();
-            return _mapper.Map<IEnumerable<CottageDto>>(allCottagesFromDb);
+            var cottages = await _cottageRepository.GetAllCottage();
+            var cottageDtos = _mapper.Map<IEnumerable<CottageDto>>(cottages);
+            return cottageDtos;
         }
 
-        public async Task Create(CottageDto cottageDto, List<IFormFile>? ImageFiles)
+        public async Task AddImages(string encodedName, List<string> imageUrls)
         {
-            // Inicjalizacja listy, jeśli jest nullem
-            cottageDto.ImageUrls ??= new List<string>();
+            var allCottages = await _cottageRepository.GetAllCottage();
+            var cottage = allCottages.FirstOrDefault(c => c.EncodedName == encodedName);
 
-            if (ImageFiles != null && ImageFiles.Count > 0)
+            if (cottage != null && imageUrls != null && imageUrls.Any())
             {
-                // Ścieżka do folderu wwwroot/DataImage
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "DataImage");
-
-                // Automatyczne tworzenie folderu, jeśli go nie ma
-                if (!Directory.Exists(uploadsFolder))
+                foreach (var url in imageUrls)
                 {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                foreach (var file in ImageFiles)
-                {
-                    if (file.Length > 0)
+                    cottage.Images.Add(new CottageImage
                     {
-                        // Tworzymy unikalną nazwę pliku
-                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                        string filePath = Path.Combine(uploadsFolder, fileName);
-
-                        // Zapis fizyczny na dysku
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(fileStream);
-                        }
-
-                        // WAŻNE: Zapisujemy do bazy TYLKO nazwę pliku
-                        cottageDto.ImageUrls.Add(fileName);
-                    }
+                        Url = url,
+                        CottageId = cottage.Id
+                    });
                 }
+                await _cottageRepository.Update(cottage);
             }
+        }
 
-            // Mapowanie DTO -> Encja i zapis w bazie
-            var cottage = _mapper.Map<AppWeb.Domain.Entities.Cottage>(cottageDto);
-            await _cottageRepository.Create(cottage);
+        // TA METODA NAPRAWIA BŁĄD KOMPILACJI
+        public async Task<CottageDto> GetMoreForCottage(string encodedName)
+        {
+            // Pobieramy wszystkie, bo GetAllCottage w repozytorium ma już Include(Images) i Include(Details)
+            var allCottages = await _cottageRepository.GetAllCottage();
+            var cottage = allCottages.FirstOrDefault(c => c.EncodedName == encodedName);
+
+            if (cottage == null) return null;
+
+            return _mapper.Map<CottageDto>(cottage);
         }
     }
 }

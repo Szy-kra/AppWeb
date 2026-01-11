@@ -1,0 +1,117 @@
+﻿@model AppWeb.Application.DataTransferObject.CottageDto
+
+@{
+    ViewData["Title"] = "Szczegóły - " + Model.Name;
+}
+
+@* Ikony FontAwesome *@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<div class="container mt-5">
+    @* 1. NAGŁÓWEK *@
+    <div class="cottage-header shadow-sm p-4 mb-4 bg-white rounded border-left-green">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h1 class="display-5 fw-bold text-dark mb-1">@Model.Name</h1>
+                <p class="text-muted fs-5">
+                    <i class="fa-solid fa-location-dot me-2 text-success"></i>@Model.City, @Model.Street
+                </p>
+            </div>
+            <div class="text-end">
+                <div class="h2 fw-bold text-success mb-0">@Model.Price.ToString("N2") zł</div>
+                <small class="text-uppercase fw-bold text-muted">Cena za dobę</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @* LEWA STRONA: SLIDER ZDJĘĆ *@
+        <div class="col-lg-8 mb-4">
+            <div id="cottageCarousel" class="carousel slide shadow rounded overflow-hidden" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @if (Model.ImageUrls != null && Model.ImageUrls.Any())
+                    {
+                        @for (int i = 0; i < Model.ImageUrls.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@Model.ImageUrls[i]"
+                                     class="d-block w-100 cottage-slider-img"
+                                     alt="Zdjęcie @(i + 1)"
+                                     onclick="openModal('@Model.ImageUrls[i]')" />
+                            </div>
+                        }
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#cottageCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#cottageCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+
+        @* PRAWA STRONA: Info i Kontakt *@
+        <div class="col-lg-4">
+            @* Karta parametrów *@
+            <div class="card shadow-sm p-4 mb-4 border-0 bg-dark text-white h-50">
+                <h5 class="fw-bold mb-4 text-warning"><i class="fa-solid fa-circle-info me-2"></i>Kluczowe informacje</h5>
+                <div class="d-flex justify-content-between mb-3 border-bottom border-secondary pb-2">
+                    <span>Liczba osób:</span>
+                    <span class="fw-bold">@Model.MaxPersons <i class="fa-solid fa-users ms-1"></i></span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 border-bottom border-secondary pb-2">
+                    <span>Miejscowość:</span>
+                    <span class="fw-bold">@Model.City</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Kod pocztowy:</span>
+                    <span class="fw-bold">@Model.PostalCode</span>
+                </div>
+            </div>
+
+            @* Sekcja Kontaktu *@
+            <div class="card shadow-sm p-4 border-success border-2 bg-white h-40">
+                <h5 class="fw-bold mb-3 text-success"><i class="fa-solid fa-address-card me-2"></i>Kontakt bezpośredni</h5>
+                <div class="contact-details">
+                    <p class="mb-2"><strong><i class="fa-solid fa-phone me-2 text-muted"></i>Telefon:</strong> +48 123 456 789</p>
+                    <p class="mb-0"><strong><i class="fa-solid fa-envelope me-2 text-muted"></i>Email:</strong> kontakt@domki.pl</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 2. SEKCJA ABOUT - ROZCIĄGNIĘTA NA CAŁĄ SZEROKOŚĆ (12 kolumn) *@
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="card shadow-sm p-4 border-0 bg-white">
+                <h4 class="fw-bold mb-4 border-bottom pb-3 text-dark">
+                    <i class="fa-solid fa-house-chimney me-2 text-success"></i>Szczegółowy opis obiektu
+                </h4>
+                @* Kontener ze scrollem dla bardzo długich opisów *@
+                <div class="about-scroll-container">
+                    <div class="text-dark lh-lg fs-5" style="white-space: pre-line; text-align: justify;">
+                        @Model.About
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* 3. PRZYCISK POWROTU *@
+    <div class="mt-5 mb-5 text-center">
+        <a asp-controller="Cottage" asp-action="IndexList" class="btn btn-secondary px-5 rounded-pill shadow-sm btn-lg">
+            <i class="fa-solid fa-arrow-left me-2"></i>Wróć do listy domków
+        </a>
+    </div>
+</div>
+
+@* MODAL DO POWIĘKSZANIA ZDJĘĆ *@
+<div id="imageModal" class="modal-custom" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content-custom" id="fullImage">
+</div>
+
+@section Scripts {
+    <script src="~/js/CottageMore.js" asp-append-version="true"></script>
+}

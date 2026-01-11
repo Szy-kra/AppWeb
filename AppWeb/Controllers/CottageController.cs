@@ -13,14 +13,14 @@ namespace AppWeb.MVC.Controllers
             _cottageService = cottageService;
         }
 
-        // ZMIANA: Nazwa metody musi być identyczna jak nazwa pliku widoku
-        // Jeśli plik to IndexList.cshtml, metoda to IndexList()
+        // Wyświetla listę wszystkich domków (Nasze Domki)
         public async Task<IActionResult> IndexList()
         {
             var cottageAll = await _cottageService.GetAllCottage();
             return View(cottageAll);
         }
 
+        // KROK 1: Formularz tworzenia (dane tekstowe)
         [HttpGet]
         public IActionResult Create()
         {
@@ -29,26 +29,68 @@ namespace AppWeb.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CottageDto cottageDto, List<IFormFile>? ImageFiles)
+        public async Task<IActionResult> Create(CottageDto cottageDto)
         {
             if (!ModelState.IsValid)
             {
                 return View(cottageDto);
             }
 
-            try
-            {
-                await _cottageService.Create(cottageDto, ImageFiles);
-                TempData["Success"] = "Domek został dodany pomyślnie!";
+            await _cottageService.Create(cottageDto);
 
-                // ZMIANA: Tutaj też kierujemy do IndexList
-                return RedirectToAction(nameof(IndexList));
-            }
-            catch (Exception ex)
+            var encodedName = cottageDto.Name.ToLower().Replace(" ", "-");
+
+            return RedirectToAction(nameof(CreateImage), new { encodedName = encodedName });
+        }
+
+        // KROK 2: Formularz dodawania zdjęć
+        [HttpGet]
+        public IActionResult CreateImage(string encodedName)
+        {
+            ViewBag.EncodedName = encodedName;
+            var cottageDto = new CottageDto { Name = encodedName.Replace("-", " ") };
+            return View(cottageDto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateImage(string encodedName, List<IFormFile> ImageFiles)
+        {
+            var imageUrls = new List<string>();
+
+            if (ImageFiles != null && ImageFiles.Any())
             {
-                ModelState.AddModelError("", "Wystąpił błąd podczas zapisu: " + ex.Message);
-                return View(cottageDto);
+                foreach (var file in ImageFiles)
+                {
+                    if (file.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(file.FileName);
+                        var pathForDatabase = "/DataImage/" + fileName;
+                        imageUrls.Add(pathForDatabase);
+                    }
+                }
             }
+
+            await _cottageService.AddImages(encodedName, imageUrls);
+
+            return RedirectToAction(nameof(IndexList));
+        }
+
+        // --- PODGLĄD SZCZEGÓŁÓW (CottageMore) ---
+        // Ta akcja odpowiada za wyświetlenie strony po kliknięciu "Więcej"
+        [HttpGet]
+        [Route("Cottage/{encodedName}/CottageMore")]
+        public async Task<IActionResult> CottageMore(string encodedName)
+        {
+            // Wywołujemy Twoją nową nazwę metody z serwisu
+            var cottageDto = await _cottageService.GetMoreForCottage(encodedName);
+
+            if (cottageDto == null)
+            {
+                return NotFound();
+            }
+
+            return View(cottageDto);
         }
     }
 }

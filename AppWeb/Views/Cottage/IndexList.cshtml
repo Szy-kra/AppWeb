@@ -42,8 +42,8 @@
                                 <small class="text-uppercase fw-bold text-dark">ZA DOBĘ</small>
                             </div>
 
-                            @* 3. ŚRODEK: OPIS (Z SCROLLEM) *@
-                            <div class="col-md-4 px-md-4 border-start border-end border-dark h-100 d-flex flex-column">
+                            @* 3. ŚRODEK: OPIS *@
+                            <div class="col-md-3 px-md-3 border-start border-end border-dark h-100 d-flex flex-column">
                                 <h6 class="fw-bold border-bottom border-dark pb-1 d-inline-block text-dark" style="width: fit-content;">Opis:</h6>
                                 <div class="description-scroll">
                                     <p class="mb-0 full-description text-dark">@item.Description</p>
@@ -51,17 +51,25 @@
                             </div>
 
                             @* 4. IKONA I LICZBA OSÓB *@
-                            <div class="col-md-1 text-center d-flex flex-column justify-content-center">
-                                @* Znak ~/ to podstawa w ASP.NET Core - wskazuje na folder wwwroot *@
+                            <div class="col-md-1 text-center d-flex flex-column justify-content-center border-end border-dark h-100">
                                 <img src="~/image/icon.png"
                                      alt="Osoby"
-                                     style="height: 35px; width: auto; margin: 0 auto 5px auto; object-fit: contain;" />
-
-                                <div class="fw-bold" style="font-size: 1.2rem;">@item.MaxPersons</div>
+                                     style="height: 30px; width: auto; margin: 0 auto 5px auto; object-fit: contain;" />
+                                <div class="fw-bold" style="font-size: 1.1rem;">@item.MaxPersons</div>
                             </div>
 
-                            @* 5. PRAWA: ZDJĘCIE *@
-                            <div class="col-md-3 ps-3 h-100">
+                            @* 5. PRZYCISK WIĘCEJ *@
+                            <div class="col-md-2 text-center">
+                                <a asp-controller="Cottage"
+                                   asp-action="CottageMore"
+                                   asp-route-encodedName="@item.EncodedName"
+                                   class="btn btn-outline-dark fw-bold rounded-pill px-4 shadow-sm">
+                                    <i class="fa-solid fa-magnifying-glass me-2"></i>Więcej
+                                </a>
+                            </div>
+
+                            @* 6. PRAWA: ZDJĘCIE *@
+                            <div class="col-md-2 ps-3 h-100">
                                 @if (item.ImageUrls != null && item.ImageUrls.Any())
                                 {
                                     <img src="@item.ImageUrls.First()" class="img-fluid rounded cottage-img-fixed" alt="@item.Name">

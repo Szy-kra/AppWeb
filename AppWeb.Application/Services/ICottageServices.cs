@@ -1,12 +1,14 @@
 ﻿using AppWeb.Application.DataTransferObject;
-using Microsoft.AspNetCore.Http;
 
 namespace AppWeb.Application.Services
 {
     public interface ICottageServices
     {
-        // Tu używamy CottageDto, nie Cottage!
-        Task Create(CottageDto cottageDto, List<IFormFile>? ImageFiles);
+        Task Create(CottageDto cottageDto);
         Task<IEnumerable<CottageDto>> GetAllCottage();
+        Task AddImages(string encodedName, List<string> imageUrls);
+
+        // Twoja nazwa metody:
+        Task<CottageDto> GetMoreForCottage(string encodedName);
     }
 }

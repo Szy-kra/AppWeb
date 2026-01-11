@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppWeb.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_v3_Final : Migration
+    public partial class Init_DbV4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

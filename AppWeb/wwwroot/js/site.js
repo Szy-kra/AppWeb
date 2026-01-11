@@ -47,3 +47,41 @@ function previewImage(input, index) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+
+  /* CreateImage*/
+
+function previewImage(input, index) {
+    const preview = document.getElementById('preview-' + index);
+    const content = document.getElementById('content-' + index);
+    const container = input.closest('.card');
+
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+            if (content) content.style.display = 'none';
+
+            let oldBtn = container.querySelector('.action-btn-remove');
+            if (oldBtn) oldBtn.remove();
+
+            const btn = document.createElement('div');
+            btn.innerHTML = '×';
+            btn.className = 'action-btn-remove';
+
+            btn.onclick = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                input.value = "";
+                preview.src = "#";
+                preview.style.display = 'none';
+                if (content) content.style.display = 'block';
+                this.remove();
+            };
+
+            container.appendChild(btn);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
