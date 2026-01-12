@@ -1,9 +1,11 @@
 ﻿using AppWeb.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppWeb.Infrastructure.Persistence
 {
-    public class AppWebDbContext : DbContext
+    // Dziedziczymy po IdentityDbContext, tak jak na Twoim obrazku pomocniczym
+    public class AppWebDbContext : IdentityDbContext
     {
         public AppWebDbContext(DbContextOptions<AppWebDbContext> options) : base(options)
         {
@@ -14,9 +16,11 @@ namespace AppWeb.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // TO JEST NAJWAŻNIEJSZE (zaznaczone czerwoną strzałką na Twoim foto)
+            // base.OnModelCreating musi być pierwsze!
             base.OnModelCreating(modelBuilder);
 
-            // KONFIGURACJA LOKALIZACJI I DETALI (ContactDetails_...)
+            // Twoja konfiguracja ContactDetails
             modelBuilder.Entity<Cottage>()
                 .OwnsOne(c => c.ContactDetails, details =>
                 {
@@ -28,7 +32,7 @@ namespace AppWeb.Infrastructure.Persistence
                     details.Property(d => d.MaxPersons).HasColumnName("ContactDetails_MaxPersons");
                 });
 
-            // KONFIGURACJA RELACJI ZDJĘĆ
+            // Twoja konfiguracja zdjęć
             modelBuilder.Entity<CottageImage>()
                 .HasOne(ci => ci.Cottage)
                 .WithMany(c => c.Images)

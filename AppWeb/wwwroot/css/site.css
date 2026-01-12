@@ -1,10 +1,8 @@
-
-
-/* --- 1. RESTART I T£O --- */
-body {
-    /* ... twoje style ... */
-    position: relative;
-    z-index: 0;
+/* --- 0. RESET PRZEGL¥DARKI --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Kluczowe dla poprawnego obliczania wysokoœci elementów */
 }
 
 /* To sprawi, ¿e treœæ bêdzie zawsze nad t³em */
@@ -186,9 +184,10 @@ body {
     resize: none;
 }
 
+/* POlE ABOUT*/
 .cottage-textarea-long {
     flex-grow: 1;
-    min-height: 800px;
+    min-height: 350px !important;
     resize: none;
 }
 

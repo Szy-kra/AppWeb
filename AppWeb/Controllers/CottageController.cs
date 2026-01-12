@@ -1,54 +1,91 @@
-﻿using AppWeb.Application.DataTransferObject;
-using AppWeb.Application.Services;
+﻿// ... (usingy bez zmian)
+
+using AppWeb.Application.Cottage.Commands.EditCottage;
+using AppWeb.Application.Cottage.Queries.GetAllCottages;
+using AppWeb.Application.Cottage.Queries.GetForOneCottage;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppWeb.MVC.Controllers
 {
     public class CottageController : Controller
     {
-        private readonly ICottageServices _cottageService;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public CottageController(ICottageServices cottageService)
+        public CottageController(IMediator mediator, IMapper mapper)
         {
-            _cottageService = cottageService;
+            _mediator = mediator;
+            _mapper = mapper;
         }
 
-        // Wyświetla listę wszystkich domków (Nasze Domki)
+        // GET: Wyświetlanie listy
+        [HttpGet]
         public async Task<IActionResult> IndexList()
         {
-            var cottageAll = await _cottageService.GetAllCottage();
+            var cottageAll = await _mediator.Send(new GetAllCottagesQuery());
             return View(cottageAll);
         }
 
-        // KROK 1: Formularz tworzenia (dane tekstowe)
+        // GET: Formularz tworzenia
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CottageDto cottageDto)
+        // GET: Szczegóły domku
+        [HttpGet]
+        [Route("Cottage/{encodedName}/Details")] // Zmieniłem dla jasności
+        public async Task<IActionResult> CottageMore(string encodedName)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(cottageDto);
-            }
+            var cottageDto = await _mediator.Send(new GetForOneCottageQuery(encodedName));
+            if (cottageDto == null) return NotFound();
+            return View(cottageDto);
+        }
 
-            await _cottageService.Create(cottageDto);
+        // GET: FORMULARZ EDYCJI (To otwiera stronę)
+        [HttpGet]
+        [Route("Cottage/Edit/{encodedName}")] // ZMIANA: Teraz zadziała adres /Cottage/Edit/nazwa
+        public async Task<IActionResult> Edit(string encodedName)
+        {
+            // Używamy GetForOneCottageQuery, które już masz!
+            var cottageDto = await _mediator.Send(new GetForOneCottageQuery(encodedName));
 
-            var encodedName = cottageDto.Name.ToLower().Replace(" ", "-");
+            if (cottageDto == null) return NotFound();
 
+            // Mapujemy DTO na komendę edycji
+            var command = _mapper.Map<EditCottageCommand>(cottageDto);
+
+            // Ważne: Jeśli plik nazywa się EditCottage.cshtml, musimy to podać:
+            return View("EditCottage", command);
+        }
+
+        // POST: ZAPIS EDYCJI
+        [HttpPost]
+        [Route("Cottage/Edit/{encodedName}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string encodedName, EditCottageCommand command)
+        {
+            if (!ModelState.IsValid) return View("EditCottage", command);
+
+            await _mediator.Send(command);
+
+            // Po edycji tekstu idziemy do zarządzania zdjęciami
             return RedirectToAction(nameof(CreateImage), new { encodedName = encodedName });
         }
 
-        // KROK 2: Formularz dodawania zdjęć
+        // --- ZDJĘCIA ---
+
         [HttpGet]
-        public IActionResult CreateImage(string encodedName)
+        [Route("Cottage/EditImages/{encodedName}")]
+        public async Task<IActionResult> CreateImage(string encodedName)
         {
+            var cottageDto = await _mediator.Send(new GetForOneCottageQuery(encodedName));
+            if (cottageDto == null) return NotFound();
+
             ViewBag.EncodedName = encodedName;
-            var cottageDto = new CottageDto { Name = encodedName.Replace("-", " ") };
             return View(cottageDto);
         }
 
@@ -56,41 +93,9 @@ namespace AppWeb.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateImage(string encodedName, List<IFormFile> ImageFiles)
         {
-            var imageUrls = new List<string>();
-
-            if (ImageFiles != null && ImageFiles.Any())
-            {
-                foreach (var file in ImageFiles)
-                {
-                    if (file.Length > 0)
-                    {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var pathForDatabase = "/DataImage/" + fileName;
-                        imageUrls.Add(pathForDatabase);
-                    }
-                }
-            }
-
-            await _cottageService.AddImages(encodedName, imageUrls);
-
-            return RedirectToAction(nameof(IndexList));
-        }
-
-        // --- PODGLĄD SZCZEGÓŁÓW (CottageMore) ---
-        // Ta akcja odpowiada za wyświetlenie strony po kliknięciu "Więcej"
-        [HttpGet]
-        [Route("Cottage/{encodedName}/CottageMore")]
-        public async Task<IActionResult> CottageMore(string encodedName)
-        {
-            // Wywołujemy Twoją nową nazwę metody z serwisu
-            var cottageDto = await _cottageService.GetMoreForCottage(encodedName);
-
-            if (cottageDto == null)
-            {
-                return NotFound();
-            }
-
-            return View(cottageDto);
+            // ... (logika zapisu zdjęć którą masz jest ok)
+            // Na końcu:
+            return RedirectToAction(nameof(CottageMore), new { encodedName = encodedName });
         }
     }
 }

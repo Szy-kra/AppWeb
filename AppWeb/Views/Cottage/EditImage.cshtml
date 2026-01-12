@@ -1,0 +1,46 @@
+﻿@model AppWeb.Application.DataTransferObject.CottageDto
+
+<h1 class="text-sun">Edytuj zdjęcia dla "@Model.Name"</h1>
+<p class="text-muted">Poniżej znajdziesz aktualne zdjęcia. Możesz dodać nowe, aby je uzupełnić.</p>
+<hr class="border-success" />
+
+<form asp-action="CreateImage" enctype="multipart/form-data" method="post" class="image-upload-form">
+    @* Przekazujemy EncodedName z ViewBag (ustawione w kontrolerze) *@
+    <input type="hidden" name="encodedName" value="@ViewBag.EncodedName" />
+
+    <div class="image-upload-grid">
+        @for (int i = 0; i < 6; i++)
+        {
+            // Sprawdzamy, czy pod tym indeksem istnieje już zdjęcie w bazie
+            var currentImg = (Model.ImageUrls != null && Model.ImageUrls.Count > i) ? Model.ImageUrls[i] : null;
+
+            <div class="card image-card position-relative">
+                <label for="file-@i" class="card-body image-label">
+
+                    <div id="content-@i" class="placeholder-content @(currentImg != null ? "d-none" : "")">
+                        <span class="image-number">Zdjęcie @(i + 1)</span>
+                        <div class="plus-icon">➕</div>
+                    </div>
+
+                    @* Jeśli zdjęcie istnieje, ustawiamy je jako podgląd *@
+                    <img id="preview-@i" src="@(currentImg ?? "#")"
+                         alt="Podgląd" class="image-preview @(currentImg != null ? "d-block" : "")" />
+
+                    <input type="file" name="ImageFiles" id="file-@i" class="d-none"
+                           accept="image/*" onchange="previewImage(this, @i)" />
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex gap-3 mt-4">
+        <button type="submit" class="btn btn-success px-5 py-3 fw-bold shadow">
+            Zaktualizuj galerię
+        </button>
+        <a asp-action="CottageMore" asp-route-encodedName="@ViewBag.EncodedName" class="btn btn-outline-secondary px-5 py-3">Wróć do domku</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/cottage-upload.js"></script>
+}

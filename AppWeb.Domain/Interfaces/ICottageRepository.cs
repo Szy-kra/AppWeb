@@ -4,13 +4,19 @@ namespace AppWeb.Domain.Interfaces
 {
     public interface ICottageRepository
     {
-        // Kontrakt na tworzenie domku
+        // Tworzenie domku
         Task Create(Cottage cottage);
 
-        // Kontrakt na pobieranie wszystkich domków
+        // Pobieranie wszystkich domków
         Task<IEnumerable<Cottage>> GetAllCottage();
 
-        // POPRAWIONE: Dodano kontrakt na aktualizację (niezbędne do zapisu zdjęć)
+        // Pobieranie jednego konkretnego domku po unikalnej nazwie (KLUCZOWE DO EDYCJI)
+        Task<Cottage?> GetByEncodedName(string encodedName);
+
+        // Kontrakt na aktualizację
         Task Update(Cottage cottage);
+
+        // Zapisywanie zmian w bazie (Zatwierdzenie transakcji)
+        Task Commit();
     }
 }
