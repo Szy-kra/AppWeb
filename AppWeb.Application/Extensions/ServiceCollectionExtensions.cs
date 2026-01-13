@@ -23,7 +23,9 @@ namespace AppWeb.Application.Extensions
             // 4. FLUENT VALIDATION
             services.AddFluentValidationAutoValidation();
 
-
+            // 5. USER CONTEXT (DODANE)
+            // Rejestrujemy usługę, aby Handler mógł pobrać dane o zalogowanym użytkowniku
+            services.AddScoped<IUserContext, UserContext>();
         }
     }
 }

@@ -3,8 +3,7 @@ using MediatR;
 
 namespace AppWeb.Application.Cottage.Commands.EditCottage
 {
-    // Upewnij się, że klasa jest wewnątrz namespace i nie ma zbędnych znaków przed 'public'
-    public class EditCottageCommandHandler : IRequestHandler<EditCottageCommand, Unit>
+    public class EditCottageCommandHandler : IRequestHandler<EditCottageCommand, string>
     {
         private readonly ICottageRepository _repository;
 
@@ -13,10 +12,11 @@ namespace AppWeb.Application.Cottage.Commands.EditCottage
             _repository = repository;
         }
 
-        public async Task<Unit> Handle(EditCottageCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(EditCottageCommand request, CancellationToken cancellationToken)
         {
-            var cottage = await _repository.GetByEncodedName(request.EncodedName);
-            if (cottage == null) return Unit.Value;
+            var cottage = await _repository.GetByEncodedName(request.EncodedName!);
+
+            if (cottage == null) return string.Empty;
 
             cottage.Name = request.Name;
             cottage.About = request.About;
@@ -28,9 +28,10 @@ namespace AppWeb.Application.Cottage.Commands.EditCottage
             cottage.ContactDetails.MaxPersons = request.MaxPersons;
 
             cottage.EncodeName();
+
             await _repository.Commit();
 
-            return Unit.Value;
+            return cottage.EncodedName!;
         }
     }
 }

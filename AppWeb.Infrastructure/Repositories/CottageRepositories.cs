@@ -28,7 +28,6 @@ namespace AppWeb.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        // 1. Metoda do pobierania jednego domku (Niezbędna do edycji!)
         public async Task<Cottage?> GetByEncodedName(string encodedName)
         {
             return await _dbContext.Cottages
@@ -37,16 +36,27 @@ namespace AppWeb.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.EncodedName == encodedName);
         }
 
-        // 2. Metoda do aktualizacji całego obiektu
         public async Task Update(Cottage cottage)
         {
             _dbContext.Cottages.Update(cottage);
             await _dbContext.SaveChangesAsync();
         }
 
-        // 3. Metoda Commit (Zatwierdzanie zmian śledzonych przez EF)
         public async Task Commit()
         {
+            await _dbContext.SaveChangesAsync();
+        }
+
+        // Implementacja metody dodającej zdjęcie do tabeli CottageImages
+        public async Task AddImage(CottageImage image)
+        {
+            _dbContext.CottageImages.Add(image);
+            // Tu nie dajemy SaveChangesAsync, bo Commit() zrobi to na końcu pętli w Handlerze
+        }
+
+        public async Task Delete(Cottage cottage)
+        {
+            _dbContext.Cottages.Remove(cottage);
             await _dbContext.SaveChangesAsync();
         }
     }

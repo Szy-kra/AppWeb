@@ -25,7 +25,7 @@ header, main, footer {
 /* --- 2. RESTART I T£O (OBRAZEK + KOLOR) --- */
 body {
     background-color: var(--forest-bg) !important;
-    color: var(--text-soft) !important;
+    color: var(--dark-text) !important;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     overflow-x: hidden;
@@ -191,7 +191,7 @@ body {
     resize: none;
 }
 
-/* Upload zdjêæ */
+/* Upload zdjêæ - POPRAWIONE, BY SIÊ NIE ROZJE¯D¯A£O */
 .image-upload-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -202,8 +202,34 @@ body {
 .image-card {
     background-color: #212529;
     border: 2px dashed #6c757d;
-    min-height: 180px;
+    height: 200px; /* Sztywna wysokoœæ - klucz do stabilnoœci */
     position: relative;
+    overflow: hidden; /* Przycina wszystko co wystaje */
+}
+
+.image-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Zdjêcie wype³nia kartê, nie rozpychaj¹c jej */
+    display: none; /* Ukryte do momentu wgrania zdjêcia */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.placeholder-content {
+    text-align: center;
+    z-index: 1;
 }
 
 .action-btn-remove {
@@ -285,9 +311,6 @@ body {
     .close-modal:hover {
         color: var(--sun-yellow);
     }
-
-    
-    /* PANEL LOGOWANIA I REJESTRACJI UZYTKOWNIKA */
 
 /* PANEL LOGOWANIA I REJESTRACJI UZYTKOWNIKA */
 

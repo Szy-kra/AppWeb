@@ -32,9 +32,18 @@
                             <a class="nav-link text-dark fw-bold" asp-area="" asp-controller="Cottage" asp-action="IndexList">Nasze Domki</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Cottage" asp-action="Create">+ Dodaj Ofertę</a>
-                        </li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="Cottage" asp-action="Create">+ Dodaj Ofertę</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-primary fw-bold d-flex align-items-center" asp-area="" asp-controller="Cottage" asp-action="UserCottages">
+                                    <img src="~/image/edit.png" alt="Edit" width="20" height="20" class="me-1" />
+                                    <span>Twoje Ogłoszenia</span>
+                                </a>
+                            </li>
+                        }
                     </ul>
 
                     <form class="d-flex mt-2 mt-lg-0" asp-controller="Cottage" asp-action="IndexList" method="get">
@@ -70,8 +79,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-  
-    }
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

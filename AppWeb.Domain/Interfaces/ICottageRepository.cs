@@ -10,7 +10,7 @@ namespace AppWeb.Domain.Interfaces
         // Pobieranie wszystkich domków
         Task<IEnumerable<Cottage>> GetAllCottage();
 
-        // Pobieranie jednego konkretnego domku po unikalnej nazwie (KLUCZOWE DO EDYCJI)
+        // Pobieranie jednego konkretnego domku po unikalnej nazwie
         Task<Cottage?> GetByEncodedName(string encodedName);
 
         // Kontrakt na aktualizację
@@ -18,5 +18,10 @@ namespace AppWeb.Domain.Interfaces
 
         // Zapisywanie zmian w bazie (Zatwierdzenie transakcji)
         Task Commit();
+
+        // --- BRAKUJĄCA METODA DO ZDJĘĆ ---
+        Task AddImage(CottageImage image);
+
+        Task Delete(Cottage cottage); //metoda usuwania reokordu domku
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AppWeb.Application.Cottage.Commands.AddCottageImages
 {
-    public class AddCottageImagesCommandHandler : IRequestHandler<AddCottageImagesCommand>
+    public class AddCottageImagesCommandHandler : IRequestHandler<AddCottageImagesCommand, Unit>
     {
         private readonly ICottageRepository _cottageRepository;
 
@@ -13,23 +13,26 @@ namespace AppWeb.Application.Cottage.Commands.AddCottageImages
             _cottageRepository = cottageRepository;
         }
 
-        public async Task Handle(AddCottageImagesCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AddCottageImagesCommand request, CancellationToken cancellationToken)
         {
-            var allCottages = await _cottageRepository.GetAllCottage();
-            var cottage = allCottages.FirstOrDefault(c => c.EncodedName == request.EncodedName);
+            var cottage = await _cottageRepository.GetByEncodedName(request.EncodedName);
 
-            if (cottage != null && request.ImageUrls.Any())
+            if (cottage == null) return Unit.Value;
+
+            foreach (var path in request.ImagePaths)
             {
-                foreach (var url in request.ImageUrls)
+                var image = new CottageImage
                 {
-                    cottage.Images.Add(new CottageImage
-                    {
-                        Url = url,
-                        CottageId = cottage.Id
-                    });
-                }
-                await _cottageRepository.Update(cottage);
+                    Url = path,
+                    CottageId = cottage.Id
+                };
+
+                await _cottageRepository.AddImage(image);
             }
+
+            await _cottageRepository.Commit();
+
+            return Unit.Value;
         }
     }
 }

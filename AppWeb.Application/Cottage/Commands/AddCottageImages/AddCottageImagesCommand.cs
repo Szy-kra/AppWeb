@@ -2,9 +2,9 @@
 
 namespace AppWeb.Application.Cottage.Commands.AddCottageImages
 {
-    public class AddCottageImagesCommand : IRequest
+    public class AddCottageImagesCommand : IRequest<Unit>
     {
         public string EncodedName { get; set; } = default!;
-        public List<string> ImageUrls { get; set; } = new();
+        public List<string> ImagePaths { get; set; } = new();
     }
 }

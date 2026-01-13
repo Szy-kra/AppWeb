@@ -13,6 +13,10 @@ builder.Services.AddControllersWithViews();
 // DODAJ TO TUTAJ:
 builder.Services.AddRazorPages();
 
+// --- DODANE DLA USERCONTEXT ---
+builder.Services.AddHttpContextAccessor(); // Niezbêdne do pobierania danych o zalogowanym u¿ytkowniku
+// ------------------------------
+
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCottageCommandValidator>();

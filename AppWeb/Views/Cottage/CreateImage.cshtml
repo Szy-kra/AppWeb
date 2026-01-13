@@ -4,23 +4,22 @@
 <p class="text-muted">Dane domku zostały zapisane. Teraz wybierz do 6 zdjęć.</p>
 <hr class="border-success" />
 
-<form asp-action="CreateImage" enctype="multipart/form-data" method="post" class="image-upload-form">
-    @* Przekazujemy EncodedName ukrytym polem, aby serwis wiedział, do którego rekordu dopisać zdjęcia *@
-    <input type="hidden" name="encodedName" value="@Model.Name.ToLower().Replace(" ", "-")" />
+@* Dodajemy asp-route-encodedName do URL formularza, żeby routing go widział *@
+<form asp-action="CreateImage" asp-route-encodedName="@ViewBag.EncodedName" enctype="multipart/form-data" method="post" class="image-upload-form">
+
+    @* ZMIANA: Używamy ViewBag.EncodedName zamiast ręcznego Replace *@
+    <input type="hidden" name="encodedName" value="@ViewBag.EncodedName" />
 
     <div class="image-upload-grid">
         @for (int i = 1; i <= 6; i++)
         {
             <div class="card image-card position-relative">
                 <label for="file-@i" class="card-body image-label">
-
                     <div id="content-@i" class="placeholder-content">
                         <span class="image-number">Zdjęcie @i</span>
                         <div class="plus-icon">➕</div>
                     </div>
-
                     <img id="preview-@i" src="#" alt="Podgląd" class="image-preview" />
-
                     <input type="file" name="ImageFiles" id="file-@i" class="d-none"
                            accept="image/*" onchange="previewImage(this, @i)" />
                 </label>
