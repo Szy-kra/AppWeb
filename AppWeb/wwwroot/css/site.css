@@ -1,117 +1,362 @@
-/* --- ZMIENNE KOLORYSTYCZNE --- */
+/* --- 0. RESET PRZEGL¥DARKI --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Kluczowe dla poprawnego obliczania wysokoœci elementów */
+}
+
+/* To sprawi, ¿e treœæ bêdzie zawsze nad t³em */
+header, main, footer {
+    position: relative;
+    z-index: 10;
+}
+
+/* --- 2. ZMIENNE I KONFIGURACJA --- */
 :root {
     --forest-bg: #121a06;
     --moss-green: #3a4230;
     --leaf-green: #4ea93b;
     --sun-yellow: #ebc334;
     --text-soft: #f4f4f4;
+    --burgundy: #800000;
+    --dark-text: #000000;
 }
 
-/* --- RESTART I T£O --- */
+/* --- 2. RESTART I T£O (OBRAZEK + KOLOR) --- */
 body {
     background-color: var(--forest-bg) !important;
-    color: var(--text-soft) !important;
+    color: var(--dark-text) !important;
     font-family: 'Montserrat', sans-serif;
     margin: 0;
+    overflow-x: hidden;
+    position: relative;
+    min-height: 100vh;
 }
 
-/* --- NAVBAR --- */
-.navbar-yellow {
+    /* Pseudoelement dla t³a z 50% przeœwitem */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('../image/background.png'); /* SprawdŸ rozszerzenie pliku */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.2; /* 20% przeœwitu */
+        z-index: -1;
+    }
+
+/* --- 3. ELEMENTY INTERFEJSU (NAVBAR I KARTY) --- */
+.navbar-yellow,
+.cottage-card {
     background-color: var(--sun-yellow) !important;
+}
+
+.navbar-yellow {
     box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-.navbar-brand, .nav-link {
-    color: var(--forest-bg) !important;
-    font-weight: 800 !important;
-    text-transform: uppercase;
-}
-
-/* --- PRZYCISKI (Wspólne dla <button> i <a>) --- */
-
-/* Jasnozielony przycisk (Zamieœæ Og³oszenie / Zapisz) */
-.btn-nature, a.btn-nature {
-    background-color: transparent !important;
-    color: var(--leaf-green) !important;
-    border: 2px solid var(--leaf-green) !important;
-    border-radius: 50px !important;
-    padding: 10px 30px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    text-decoration: none !important; /* Kluczowe dla <a> */
-    display: inline-block !important;
-    transition: all 0.3s ease-in-out !important;
-    cursor: pointer;
-    text-align: center;
-}
-
-    .btn-nature:hover, a.btn-nature:hover {
-        background-color: var(--leaf-green) !important;
-        color: var(--forest-bg) !important;
-        box-shadow: 0 0 20px var(--leaf-green) !important;
-        transform: translateY(-2px) !important;
-    }
-
-/* ¯ó³ty przycisk (PrzejdŸ do Oferty / Szczegó³y) */
-.btn-sun, a.btn-sun {
-    background-color: var(--sun-yellow) !important;
-    color: var(--forest-bg) !important;
-    border: 2px solid var(--sun-yellow) !important;
-    border-radius: 50px !important;
-    padding: 10px 30px !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    transition: all 0.3s ease-in-out !important;
-    cursor: pointer;
-    text-align: center;
-}
-
-    .btn-sun:hover, a.btn-sun:hover {
-        background-color: transparent !important;
-        color: var(--sun-yellow) !important;
-        box-shadow: 0 0 20px var(--sun-yellow) !important;
-        transform: translateY(-2px) !important;
-    }
-
-/* --- KARTY I TEKSTY --- */
-.nature-card {
-    background-color: var(--moss-green) !important;
-    border-left: 5px solid var(--leaf-green) !important;
-    border-radius: 8px;
+.cottage-card,
+.equal-height-card {
+    border: 2px solid var(--burgundy) !important;
+    border-radius: 15px;
+    height: 21vh;
+    min-height: 165px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease-in-out;
     position: relative;
 }
 
-.text-sun {
-    color: var(--sun-yellow) !important;
+    /* Wymuszenie koloru tekstu w ¿ó³tych elementach */
+    .cottage-card,
+    .cottage-card *,
+    .equal-height-card * {
+        color: var(--dark-text) !important;
+    }
+
+/* --- 4. SEKCJA OPISÓW I SCROLLBAR --- */
+.description-scroll {
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 100%;
+    padding-right: 10px;
 }
 
-.text-nature {
+    /* Estetyczny bordowy scrollbar */
+    .description-scroll::-webkit-scrollbar,
+    .about-scroll-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .description-scroll::-webkit-scrollbar-thumb,
+    .about-scroll-container::-webkit-scrollbar-thumb {
+        background: var(--burgundy);
+        border-radius: 10px;
+    }
+
+.about-scroll-container {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+/* --- 5. GRAFIKA I IKONY --- */
+.cottage-img,
+.cottage-img-fixed,
+.no-img-placeholder {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+}
+
+.fa-2x {
+    font-size: 1.8rem !important;
+}
+
+/* --- 6. PRZYCISKI (STYLE NATURY I S£OÑCA) --- */
+.btn-nature,
+.btn-sun {
+    border-radius: 50px !important;
+    padding: 8px 25px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease-in-out !important;
+    display: inline-block !important;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.btn-nature {
+    background-color: transparent !important;
     color: var(--leaf-green) !important;
+    border: 2px solid var(--leaf-green) !important;
 }
 
-/* --- PRZYCISK USUWANIA ZDJÊÆ (CZERWONY KRZY¯YK) --- */
+    .btn-nature:hover {
+        background-color: var(--leaf-green) !important;
+        color: var(--forest-bg) !important;
+        box-shadow: 0 0 15px var(--leaf-green);
+        transform: translateY(-2px);
+    }
+
+.btn-sun {
+    background-color: var(--sun-yellow) !important;
+    color: var(--forest-bg) !important;
+    border: 2px solid var(--sun-yellow) !important;
+}
+
+    .btn-sun:hover {
+        background-color: transparent !important;
+        color: var(--sun-yellow) !important;
+        box-shadow: 0 0 15px var(--sun-yellow);
+        transform: translateY(-2px);
+    }
+
+/* --- 7. FORMULARZE I SIATKA (CREATE / EDIT) --- */
+.cottage-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.cottage-column-basic {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cottage-column-description {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 20px;
+}
+
+.cottage-textarea-short {
+    height: 80px;
+    resize: none;
+}
+
+/* POlE ABOUT*/
+.cottage-textarea-long {
+    flex-grow: 1;
+    min-height: 350px !important;
+    resize: none;
+}
+
+/* Upload zdjêæ - POPRAWIONE, BY SIÊ NIE ROZJE¯D¯A£O */
+.image-upload-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.image-card {
+    background-color: #212529;
+    border: 2px dashed #6c757d;
+    height: 200px; /* Sztywna wysokoœæ - klucz do stabilnoœci */
+    position: relative;
+    overflow: hidden; /* Przycina wszystko co wystaje */
+}
+
+.image-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Zdjêcie wype³nia kartê, nie rozpychaj¹c jej */
+    display: none; /* Ukryte do momentu wgrania zdjêcia */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.placeholder-content {
+    text-align: center;
+    z-index: 1;
+}
+
 .action-btn-remove {
     position: absolute !important;
-    top: -10px !important;
-    right: -10px !important;
-    width: 28px !important;
-    height: 28px !important;
+    top: -10px;
+    right: -10px;
+    width: 26px;
+    height: 26px;
     background-color: #dc3545 !important;
     color: white !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    font-weight: bold !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid white !important;
-    z-index: 999 !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    transition: transform 0.2s ease;
+    z-index: 100;
 }
 
-    .action-btn-remove:hover {
-        transform: scale(1.2);
+/* --- 8. WIDOK COTTAGE MORE (SLIDER I MODAL) --- */
+.border-left-green {
+    border-left: 8px solid var(--leaf-green);
+}
+
+.cottage-slider-img {
+    height: 500px;
+    object-fit: cover;
+    cursor: zoom-in;
+    transition: filter 0.3s ease;
+}
+
+    .cottage-slider-img:hover {
+        filter: brightness(0.9);
+    }
+
+.modal-custom {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content-custom {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    animation: zoom 0.3s;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .close-modal:hover {
+        color: var(--sun-yellow);
+    }
+
+/* PANEL LOGOWANIA I REJESTRACJI UZYTKOWNIKA */
+
+/* Stylizuje tekst etykiety w polach Identity (¿eby by³ widoczny) */
+.form-floating > label {
+    color: #333333 !important;
+}
+
+/* Stylizuje tekst etykiety, gdy pole jest aktywne - TWÓJ KOLOR #e6f542 */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #b8c71e !important; /* Nieco ciemniejszy odcieñ Twojego koloru dla lepszej czytelnoœci tekstu */
+    opacity: 1;
+}
+
+/* Obramowanie pól i podœwietlenie focusa na Twój kolor */
+.form-control {
+    border: 1px solid #ced4da !important;
+}
+
+    .form-control:focus {
+        border-color: #e6f542 !important;
+        box-shadow: 0 0 0 0.25rem rgba(230, 245, 66, 0.25) !important;
+    }
+
+/* G³ówne przyciski (Register/Login) - TWÓJ KOLOR #e6f542 */
+.btn-primary {
+    background-color: #e6f542 !important;
+    border-color: #e6f542 !important;
+    color: #000000 !important; /* Czarny tekst idealnie pasuje do tego koloru */
+    font-weight: 600;
+}
+
+    .btn-primary:hover {
+        background-color: #cbd936 !important; /* Ciemniejszy wariant Twojego koloru na hover */
+        border-color: #cbd936 !important;
+        color: #000000 !important;
+    }
+
+/* Linki pod formularzem - TWÓJ KOLOR #e6f542 */
+section a {
+    color: #b8c71e !important; /* Ciemniejszy odcieñ Twojego koloru, ¿eby link by³ czytelny na bia³ym tle */
+    text-decoration: none;
+}
+
+    section a:hover {
+        color: #8c9912 !important;
+        text-decoration: underline;
     }

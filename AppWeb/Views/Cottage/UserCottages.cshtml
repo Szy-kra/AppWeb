@@ -1,0 +1,123 @@
+﻿@model IEnumerable<AppWeb.Application.DataTransferObject.CottageDto>
+
+@{
+    ViewData["Title"] = "Twoje Ogłoszenia";
+    int counter = 1;
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark">Panel Właściciela</h2>
+            <p class="text-muted">Zarządzaj swoimi ofertami i sprawdzaj ich status</p>
+        </div>
+        <a asp-action="Create" class="btn btn-success fw-bold shadow-sm">+ Dodaj nową ofertę</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th scope="col" class="ps-4" style="width: 70px;">Lp.</th>
+                            <th scope="col" style="width: 100px;">Zdjęcie</th>
+                            <th scope="col">Nazwa Domku</th>
+                            <th scope="col">Miasto</th>
+                            <th scope="col">Cena</th>
+                            <th scope="col" class="text-center" style="width: 250px;">Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var cottage in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-muted">@counter.</td>
+                                    <td>
+                                        <div class="rounded shadow-sm border overflow-hidden" style="width: 80px; height: 60px;">
+                                            @* Używamy ImageUrls, bo tak masz w DTO *@
+                                            @if (cottage.ImageUrls != null && cottage.ImageUrls.Any())
+                                            {
+                                                @* cottage.ImageUrls.First() to bezpośrednio string ze ścieżką *@
+                                                <img src="@cottage.ImageUrls.First()" alt="@cottage.Name"
+                                                     style="width: 100%; height: 100%; object-fit: cover;">
+                                            }
+                                            else
+                                            {
+                                                @* Twój obrazek z wwwroot/image/placeholder.png *@
+                                                <img src="/image/placeholder.png" alt="Brak zdjęcia"
+                                                     style="width: 100%; height: 100%; object-fit: cover; opacity: 0.7;">
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold text-dark">@cottage.Name</td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">@cottage.City</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">@cottage.Price zł</span>
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a asp-controller="Cottage" asp-action="Edit" asp-route-encodedName="@cottage.EncodedName"
+                                               class="btn btn-primary btn-sm d-inline-flex align-items-center px-3 shadow-sm">
+                                                <img src="/image/edit.png" alt="Edit" width="14" height="14" class="me-2 filter-white" />
+                                                Edytuj
+                                            </a>
+
+                                            <form asp-action="Delete" asp-route-encodedName="@cottage.EncodedName" method="post"
+                                                  onsubmit="return confirm('Czy na pewno chcesz usunąć to ogłoszenie?');">
+                                                <button type="submit" class="btn btn-danger btn-sm d-inline-flex align-items-center px-3 shadow-sm">
+                                                    Usuń
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <div class="text-muted">Brak ogłoszeń.</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table thead th {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        padding: 15px;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .filter-white {
+        filter: brightness(0) invert(1);
+    }
+
+    .badge {
+        font-weight: 500;
+        padding: 0.5em 0.8em;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b;
+        }
+</style>

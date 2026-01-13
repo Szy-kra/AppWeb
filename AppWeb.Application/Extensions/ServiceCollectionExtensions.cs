@@ -1,29 +1,31 @@
-﻿using AppWeb.Application.Mappings;
-using AppWeb.Application.Services;
-using AppWeb.Application.Validators;
+﻿using AppWeb.Application.Cottage.Commands.CreateCottage;
+using AppWeb.Application.Mappings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace AppWeb.Application.Extensions
 {
     public static class ServiceCollectionExtension
     {
-
-        //metoda rozszerzająca w Application 
         public static void AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<ICottageServices, CottageServices>();
+            // 1. REJESTRACJA MEDIATR (To zastępuje Twoje serwisy)
+            // Ta linia automatycznie znajdzie wszystkie Twoje Handlery (GetAll, GetForOne itd.)
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCottageCommand).Assembly));
 
+            // 2. AUTOMAPPER
             services.AddAutoMapper(typeof(CottageMappingProfile));
 
-            services.AddValidatorsFromAssemblyContaining<CottageDtoValidator>();
+            // 3. VALIDATORS
+            services.AddValidatorsFromAssemblyContaining<CreateCottageCommandValidator>();
 
+            // 4. FLUENT VALIDATION
             services.AddFluentValidationAutoValidation();
+
+            // 5. USER CONTEXT (DODANE)
+            // Rejestrujemy usługę, aby Handler mógł pobrać dane o zalogowanym użytkowniku
+            services.AddScoped<IUserContext, UserContext>();
         }
     }
-
-
-
 }

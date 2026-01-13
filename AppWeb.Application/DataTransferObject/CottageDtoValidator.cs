@@ -1,7 +1,6 @@
-﻿using AppWeb.Application.DataTransferObject;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace AppWeb.Application.Validators
+namespace AppWeb.Application.DataTransferObject
 {
     public class CottageDtoValidator : AbstractValidator<CottageDto>
     {
@@ -11,7 +10,6 @@ namespace AppWeb.Application.Validators
                 .NotEmpty().WithMessage("Proszę podać nazwę domku.")
                 .Length(2, 30).WithMessage("Nazwa domku musi zawierać od 2 do 30 znaków.");
 
-            // Cena - sprawdzamy czy większa od zera
             RuleFor(c => c.Price)
                 .GreaterThan(0).WithMessage("Cena musi być większa niż 0.");
 
@@ -29,8 +27,7 @@ namespace AppWeb.Application.Validators
                 .NotEmpty().WithMessage("Proszę podać ulicę.");
 
             RuleFor(c => c.City)
-                .NotEmpty().WithMessage("Proszę podać miejscowość.")
-                .Length(2, 50).WithMessage("Miejscowość musi mieć od 2 do 50 znaków.");
+                .NotEmpty().WithMessage("Proszę podać miejscowość.");
 
             RuleFor(c => c.PostalCode)
                 .NotEmpty().WithMessage("Proszę podać kod pocztowy.")

@@ -1,0 +1,40 @@
+﻿@model AppWeb.Application.DataTransferObject.CottageDto
+
+<h1 class="text-sun">Krok 2: Dodaj zdjęcia dla "@Model.Name"</h1>
+<p class="text-muted">Dane domku zostały zapisane. Teraz wybierz do 6 zdjęć.</p>
+<hr class="border-success" />
+
+@* Dodajemy asp-route-encodedName do URL formularza, żeby routing go widział *@
+<form asp-action="CreateImage" asp-route-encodedName="@ViewBag.EncodedName" enctype="multipart/form-data" method="post" class="image-upload-form">
+
+    @* ZMIANA: Używamy ViewBag.EncodedName zamiast ręcznego Replace *@
+    <input type="hidden" name="encodedName" value="@ViewBag.EncodedName" />
+
+    <div class="image-upload-grid">
+        @for (int i = 1; i <= 6; i++)
+        {
+            <div class="card image-card position-relative">
+                <label for="file-@i" class="card-body image-label">
+                    <div id="content-@i" class="placeholder-content">
+                        <span class="image-number">Zdjęcie @i</span>
+                        <div class="plus-icon">➕</div>
+                    </div>
+                    <img id="preview-@i" src="#" alt="Podgląd" class="image-preview" />
+                    <input type="file" name="ImageFiles" id="file-@i" class="d-none"
+                           accept="image/*" onchange="previewImage(this, @i)" />
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex gap-3 mt-4">
+        <button type="submit" class="btn btn-success px-5 py-3 fw-bold shadow">
+            Zapisz zdjęcia i zakończ
+        </button>
+        <a asp-action="IndexList" class="btn btn-outline-secondary px-5 py-3">Pomiń dodawanie zdjęć</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/cottage-upload.js"></script>
+}
