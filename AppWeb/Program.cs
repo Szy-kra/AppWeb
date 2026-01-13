@@ -7,35 +7,33 @@ using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Podstawowa konfiguracja MVC
+// --- SEKCJA SERVICES (Przed builder.Build) ---
 builder.Services.AddControllersWithViews();
 
-// 2. Konfiguracja FluentValidation
+// DODAJ TO TUTAJ:
+builder.Services.AddRazorPages();
+
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateCottageCommandValidator>();
 
-// 3. REJESTRACJA MEDIATR (Wersja 14.0.0 dla .NET 8)
-// Ta linia sprawia, øe MediatR znajdzie wszystkie Twoje Commandy i Handlery
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    // Jeúli Handlery masz w innym projekcie (Application), dodaj teø to:
     cfg.RegisterServicesFromAssembly(typeof(AppWeb.Application.Extensions.ServiceCollectionExtension).Assembly);
 });
 
-// 4. Konfiguracja Warstw (Infrastructure i Application)
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+// --- BUDOWANIE APLIKACJI ---
 var app = builder.Build();
 
-// 5. Seeding bazy danych (Uruchamianie asynchroniczne)
+// --- SEKCJA MIDDLEWARE ---
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<CottageSeeder>();
 await seeder.Seed();
 
-// 6. Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -47,10 +45,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+// KOLEJNOå∆ JEST KLUCZOWA:
+app.UseAuthentication(); // 1. Sprawdü kim jest uøytkownik
+app.UseAuthorization();  // 2. Sprawdü co moøe robiÊ
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

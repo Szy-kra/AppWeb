@@ -2,6 +2,7 @@
 using AppWeb.Infrastructure.Persistence;
 using AppWeb.Infrastructure.Repositories;
 using AppWeb.Infrastructure.Seeders;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,8 @@ namespace AppWeb.Infrastructure.Extensions
             // Tutaj musimy użyć AddDbContext, a nie nazwy samej metody rozszerzającej
             services.AddDbContext<AppWebDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDefaultIdentity<IdentityUser>()
+                .AddEntityFrameworkStores<AppWebDbContext>();
 
 
             /* AddScoped rejestruje usługę w kontenerze Dependency Injection z cyklem życia ograniczonym

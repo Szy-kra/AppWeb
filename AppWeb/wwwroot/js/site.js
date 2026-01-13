@@ -1,6 +1,8 @@
 ﻿/**
  * Obsługa podglądu zdjęć z dynamicznym przyciskiem usuwania
  */
+
+
 function previewImage(input, index) {
     const preview = document.getElementById('preview-' + index);
     const content = document.getElementById('content-' + index);
@@ -85,3 +87,56 @@ function previewImage(input, index) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+/*Rejestracja uzytkownika */
+
+         document.addEventListener("DOMContentLoaded", function () {
+        // 1. Tłumaczenie nagłówków i tekstów na stronie Register/Login
+        const translations = {
+             "Register": "Zarejestruj się",
+         "Create a new account.": "Utwórz nowe konto.",
+         "Log in": "Zaloguj się",
+         "Use a local account to log in.": "Zaloguj się przez konto lokalne.",
+         "Email": "Adres E-mail",
+         "Password": "Hasło",
+         "Confirm Password": "Potwierdź hasło",
+         "Remember me?": "Zapamiętaj mnie?",
+         "Forgot your password?": "Zapomniałeś hasła?",
+         "Register as a new user": "Zarejestruj się jako nowy użytkownik",
+         "Resend email confirmation": "Wyślij ponownie potwierdzenie e-mail"
+        };
+
+         // Funkcja zamieniająca tekst w elementach
+         function translatePage() {
+             // Tłumaczenie przycisków
+             document.querySelectorAll("button").forEach(btn => {
+                 if (translations[btn.innerText.trim()]) {
+                     btn.innerText = translations[btn.innerText.trim()];
+                 }
+             });
+
+            // Tłumaczenie nagłówków h1 i h2
+            document.querySelectorAll("h1, h2").forEach(el => {
+                if (translations[el.innerText.trim()]) {
+             el.innerText = translations[el.innerText.trim()];
+                }
+            });
+
+            // Tłumaczenie etykiet (labels)
+            document.querySelectorAll("label").forEach(label => {
+                if (translations[label.innerText.trim()]) {
+             label.innerText = translations[label.innerText.trim()];
+                }
+            });
+
+             // Tłumaczenie linków
+            document.querySelectorAll("a").forEach(link => {
+                if (translations[link.innerText.trim()]) {
+             link.innerText = translations[link.innerText.trim()];
+                }
+            });
+        }
+
+         translatePage();
+    });
+    

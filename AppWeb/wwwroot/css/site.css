@@ -285,3 +285,55 @@ body {
     .close-modal:hover {
         color: var(--sun-yellow);
     }
+
+    
+    /* PANEL LOGOWANIA I REJESTRACJI UZYTKOWNIKA */
+
+/* PANEL LOGOWANIA I REJESTRACJI UZYTKOWNIKA */
+
+/* Stylizuje tekst etykiety w polach Identity (¿eby by³ widoczny) */
+.form-floating > label {
+    color: #333333 !important;
+}
+
+/* Stylizuje tekst etykiety, gdy pole jest aktywne - TWÓJ KOLOR #e6f542 */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #b8c71e !important; /* Nieco ciemniejszy odcieñ Twojego koloru dla lepszej czytelnoœci tekstu */
+    opacity: 1;
+}
+
+/* Obramowanie pól i podœwietlenie focusa na Twój kolor */
+.form-control {
+    border: 1px solid #ced4da !important;
+}
+
+    .form-control:focus {
+        border-color: #e6f542 !important;
+        box-shadow: 0 0 0 0.25rem rgba(230, 245, 66, 0.25) !important;
+    }
+
+/* G³ówne przyciski (Register/Login) - TWÓJ KOLOR #e6f542 */
+.btn-primary {
+    background-color: #e6f542 !important;
+    border-color: #e6f542 !important;
+    color: #000000 !important; /* Czarny tekst idealnie pasuje do tego koloru */
+    font-weight: 600;
+}
+
+    .btn-primary:hover {
+        background-color: #cbd936 !important; /* Ciemniejszy wariant Twojego koloru na hover */
+        border-color: #cbd936 !important;
+        color: #000000 !important;
+    }
+
+/* Linki pod formularzem - TWÓJ KOLOR #e6f542 */
+section a {
+    color: #b8c71e !important; /* Ciemniejszy odcieñ Twojego koloru, ¿eby link by³ czytelny na bia³ym tle */
+    text-decoration: none;
+}
+
+    section a:hover {
+        color: #8c9912 !important;
+        text-decoration: underline;
+    }
